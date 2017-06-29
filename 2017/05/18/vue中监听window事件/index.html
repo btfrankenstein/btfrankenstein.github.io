@@ -99,7 +99,7 @@
 <meta property="og:url" content="http://btfrankenstein.github.io/2017/05/18/vue中监听window事件/index.html">
 <meta property="og:site_name" content="BtFrankenstein">
 <meta property="og:description" content="vue 中监听 window事件今天有需求是当PC用户在完成第三方支付之后，又在浏览器切换回我自己页面时，需要捕获用户回到页面的事件，进而自动刷新页面。 思考过后发现使用 window.onfocus 可以达到这个需求。只是不知道 vue 的是如何监听 window 事件的。 一开始一直想着用 vue 的 v-on 绑定在哪里监听，但是找不到方式。后来google了一下发现其实直接在 ready">
-<meta property="og:updated_time" content="2017-06-29T05:43:29.000Z">
+<meta property="og:updated_time" content="2017-06-29T06:17:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="vue中监听window事件">
 <meta name="twitter:description" content="vue 中监听 window事件今天有需求是当PC用户在完成第三方支付之后，又在浏览器切换回我自己页面时，需要捕获用户回到页面的事件，进而自动刷新页面。 思考过后发现使用 window.onfocus 可以达到这个需求。只是不知道 vue 的是如何监听 window 事件的。 一开始一直想着用 vue 的 v-on 绑定在哪里监听，但是找不到方式。后来google了一下发现其实直接在 ready">
@@ -322,6 +322,7 @@
         <h1 id="vue-中监听-window事件"><a href="#vue-中监听-window事件" class="headerlink" title="vue 中监听 window事件"></a><code>vue</code> 中监听 <code>window</code>事件</h1><p>今天有需求是当PC用户在完成第三方支付之后，又在浏览器切换回我自己页面时，需要捕获用户回到页面的事件，进而自动刷新页面。</p>
 <p>思考过后发现使用 <code>window.onfocus</code> 可以达到这个需求。只是不知道 <code>vue</code> 的是如何监听 <code>window</code> 事件的。</p>
 <p>一开始一直想着用 <code>vue</code> 的 <code>v-on</code> 绑定在哪里监听，但是找不到方式。后来google了一下发现其实直接在 <code>ready</code> 的时候给 <code>window</code> 添加事件就好了，没必要使用 <code>v-on</code> 或者其他 <code>vue</code> 的方法。</p>
+<a id="more"></a>
 <p>大概的代码如下</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// pay.vue</span></div><div class="line">methods: &#123;</div><div class="line">  handleWinFocus() &#123;</div><div class="line">    alert(<span class="string">'you are in page now'</span>);</div><div class="line">  &#125;,</div><div class="line">&#125;,</div><div class="line">ready() &#123;</div><div class="line">  <span class="built_in">window</span>.addEventListener(<span class="string">'focus'</span>, <span class="keyword">this</span>.handleWinFocus);</div><div class="line">&#125;,</div><div class="line">beforeDestroy() &#123;</div><div class="line">  <span class="built_in">window</span>.removeEventListener(<span class="string">'focus'</span>, <span class="keyword">this</span>.handleWinFocus);</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
 <p>值得注意的是一开始没有在 <code>beforeDestroy</code> 的时候解除事件绑定。就会发现跳出 <code>pay</code> 页面之后再回来，然后切换标签页，会打印两次信息。是因为事件一直存在在页面中，而单页面应用没有刷新，也就不会自己解绑，因而绑定了两次事件。所以要在 <code>beforeDestroy</code> 里面手动解绑。</p>
