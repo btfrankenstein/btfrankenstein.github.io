@@ -93,12 +93,16 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="BtFrankenstein">
-<meta property="og:url" content="http://btfrankenstein.github.io/index.html">
+<meta name="description" content="Vue子组件中的props作为元素的value值时遇到的问题需求在项目中遇到一项需求。在父组件中异步请求一项数据，并且把这项数据传递到子组件中。组件中使用该数据作为 &amp;lt;input&amp;gt; 的 value，并且要求是响应式的。可以把代码简化成下面这个样子： 1234567891011121314151617181920212223&amp;lt;!-- 父组件 --&amp;gt;&amp;lt;template l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue子组件中的props作为&lt;input&gt;元素的value值时遇到的问题">
+<meta property="og:url" content="http://btfrankenstein.github.io/2017/07/19/Vue子组件中的props作为-input-元素的value值时遇到的问题/index.html">
 <meta property="og:site_name" content="BtFrankenstein">
+<meta property="og:description" content="Vue子组件中的props作为元素的value值时遇到的问题需求在项目中遇到一项需求。在父组件中异步请求一项数据，并且把这项数据传递到子组件中。组件中使用该数据作为 &amp;lt;input&amp;gt; 的 value，并且要求是响应式的。可以把代码简化成下面这个样子： 1234567891011121314151617181920212223&amp;lt;!-- 父组件 --&amp;gt;&amp;lt;template l">
+<meta property="og:updated_time" content="2017-07-19T03:28:39.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="BtFrankenstein">
+<meta name="twitter:title" content="Vue子组件中的props作为&lt;input&gt;元素的value值时遇到的问题">
+<meta name="twitter:description" content="Vue子组件中的props作为元素的value值时遇到的问题需求在项目中遇到一项需求。在父组件中异步请求一项数据，并且把这项数据传递到子组件中。组件中使用该数据作为 &amp;lt;input&amp;gt; 的 value，并且要求是响应式的。可以把代码简化成下面这个样子： 1234567891011121314151617181920212223&amp;lt;!-- 父组件 --&amp;gt;&amp;lt;template l">
 
 
 
@@ -126,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="http://btfrankenstein.github.io/"/>
+  <link rel="canonical" href="http://btfrankenstein.github.io/2017/07/19/Vue子组件中的props作为-input-元素的value值时遇到的问题/"/>
 
 
 
 
 
-  <title>BtFrankenstein</title>
+  <title>Vue子组件中的props作为<input>元素的value值时遇到的问题 | BtFrankenstein</title>
   
 
 
@@ -157,9 +161,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -242,9 +244,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -270,9 +272,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/19/Vue子组件中的props作为-input-元素的value值时遇到的问题/" itemprop="url">Vue子组件中的props作为<input>元素的value值时遇到的问题</a></h1>
+          <h1 class="post-title" itemprop="name headline">Vue子组件中的props作为<input>元素的value值时遇到的问题</h1>
         
 
         <div class="post-meta">
@@ -319,9 +319,7 @@
       
 
       
-        
-          
-            <h1 id="Vue子组件中的props作为元素的value值时遇到的问题"><a href="#Vue子组件中的props作为元素的value值时遇到的问题" class="headerlink" title="Vue子组件中的props作为元素的value值时遇到的问题"></a>Vue子组件中的props作为<input>元素的value值时遇到的问题</h1><h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>在项目中遇到一项需求。在父组件中异步请求一项数据，并且把这项数据传递到子组件中。组件中使用该数据作为 <code>&lt;input&gt;</code> 的 <code>value</code>，并且要求是响应式的。可以把代码简化成下面这个样子：</p>
+        <h1 id="Vue子组件中的props作为元素的value值时遇到的问题"><a href="#Vue子组件中的props作为元素的value值时遇到的问题" class="headerlink" title="Vue子组件中的props作为元素的value值时遇到的问题"></a>Vue子组件中的props作为<input>元素的value值时遇到的问题</h1><h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>在项目中遇到一项需求。在父组件中异步请求一项数据，并且把这项数据传递到子组件中。组件中使用该数据作为 <code>&lt;input&gt;</code> 的 <code>value</code>，并且要求是响应式的。可以把代码简化成下面这个样子：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- 父组件 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span> <span class="attr">lang</span>=<span class="string">"html"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">input-drop</span> <span class="attr">:val</span>=<span class="string">"serviceName"</span>&gt;</span><span class="tag">&lt;/<span class="name">input-drop</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></div><div class="line">  import InputDrop from '../components/inputdropdown';</div><div class="line">  export default &#123;</div><div class="line">    data() &#123;</div><div class="line">      return &#123;</div><div class="line">        serviceName: '',</div><div class="line">      &#125;;</div><div class="line">    &#125;,</div><div class="line">    components: &#123;</div><div class="line">      InputDrop,</div><div class="line">    &#125;,</div><div class="line">    mounted() &#123;</div><div class="line">      setTimeout(() =&gt; &#123;</div><div class="line">        this.serviceName = 'vueService';</div><div class="line">      &#125;, 1000)</div><div class="line">    &#125;,</div><div class="line">  &#125;;</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- 子组件 inputdrop.vue --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span> <span class="attr">lang</span>=<span class="string">"html"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>&#123;&#123; val &#125;&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">v-model</span>=<span class="string">"val"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></div><div class="line">  export default &#123;</div><div class="line">    props: ['val'],</div><div class="line">  &#125;;</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>直接运行上面的代码，打开控制台会发现，vue会给出报错：</p>
@@ -349,20 +347,27 @@
 <p>最终代码如下：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- 父组件 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span> <span class="attr">lang</span>=<span class="string">"html"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">input-drop</span> <span class="attr">v-model</span>=<span class="string">"serviceName"</span>&gt;</span><span class="tag">&lt;/<span class="name">input-drop</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">  <span class="keyword">import</span> InputDrop <span class="keyword">from</span> <span class="string">'../components/inputdropdown'</span>;</div><div class="line">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</div><div class="line">    data() &#123;</div><div class="line">      <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">serviceName</span>: <span class="string">''</span>,</div><div class="line">      &#125;;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">components</span>: &#123;</div><div class="line">      InputDrop,</div><div class="line">    &#125;,</div><div class="line">    mounted() &#123;</div><div class="line">      setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">        <span class="keyword">this</span>.serviceName = <span class="string">'vueService'</span>;</div><div class="line">      &#125;, <span class="number">1000</span>)</div><div class="line">    &#125;,</div><div class="line">  &#125;;</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- 子组件 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span> <span class="attr">lang</span>=<span class="string">"html"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>&#123;&#123; inputValue &#125;&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">v-model</span>=<span class="string">"inputValue"</span> @<span class="attr">input</span>=<span class="string">"typing"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</div><div class="line">    <span class="attr">props</span>: &#123; <span class="comment">// 更标准的props传入模式</span></div><div class="line">      value: &#123;</div><div class="line">        <span class="attr">type</span>: [<span class="built_in">String</span>, <span class="built_in">Number</span>],</div><div class="line">        <span class="attr">default</span>: <span class="string">''</span>,</div><div class="line">      &#125;,</div><div class="line">    &#125;,</div><div class="line">    data() &#123;</div><div class="line">      <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">inputValue</span>: <span class="string">''</span>,</div><div class="line">      &#125;;</div><div class="line">    &#125;</div><div class="line">    methods: &#123;</div><div class="line">      typing(event) &#123;</div><div class="line">        <span class="keyword">const</span> value = event.target.value; <span class="comment">// 原生事件对象</span></div><div class="line">        <span class="keyword">this</span>.setValue(value);</div><div class="line">      &#125;,</div><div class="line">      setValue(value) &#123;</div><div class="line">        <span class="keyword">this</span>.inputValue = value;</div><div class="line">      &#125;,</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">watch</span>: &#123;</div><div class="line">      val(val) &#123; <span class="comment">// 监听val的变动</span></div><div class="line">        <span class="keyword">this</span>.setValue(val);</div><div class="line">      &#125;,</div><div class="line">    &#125;,</div><div class="line">  &#125;;</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
-          
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <div>
+      
+        
+
       
     </div>
 
@@ -370,139 +375,38 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://btfrankenstein.github.io/2017/05/18/vue中监听window事件/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ZhangChengbin">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BtFrankenstein">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/18/vue中监听window事件/" itemprop="url">vue中监听window事件</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-18T12:03:05+08:00">
-                2017-05-18
-              </time>
+              <a href="/2017/05/18/vue中监听window事件/" rel="next" title="vue中监听window事件">
+                <i class="fa fa-chevron-left"></i> vue中监听window事件
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <h1 id="vue-中监听-window事件"><a href="#vue-中监听-window事件" class="headerlink" title="vue 中监听 window事件"></a><code>vue</code> 中监听 <code>window</code>事件</h1><p>今天有需求是当PC用户在完成第三方支付之后，又在浏览器切换回我自己页面时，需要捕获用户回到页面的事件，进而自动刷新页面。</p>
-<p>思考过后发现使用 <code>window.onfocus</code> 可以达到这个需求。只是不知道 <code>vue</code> 的是如何监听 <code>window</code> 事件的。</p>
-<p>一开始一直想着用 <code>vue</code> 的 <code>v-on</code> 绑定在哪里监听，但是找不到方式。后来google了一下发现其实直接在 <code>ready</code> 的时候给 <code>window</code> 添加事件就好了，没必要使用 <code>v-on</code> 或者其他 <code>vue</code> 的方法。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/05/18/vue中监听window事件/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -510,6 +414,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -529,8 +437,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -574,6 +491,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Vue子组件中的props作为元素的value值时遇到的问题"><span class="nav-number">1.</span> <span class="nav-text">Vue子组件中的props作为元素的value值时遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#需求"><span class="nav-number">1.1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方案"><span class="nav-number">1.2.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最终代码"><span class="nav-number">1.3.</span> <span class="nav-text">最终代码</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -694,10 +627,10 @@
 
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 
