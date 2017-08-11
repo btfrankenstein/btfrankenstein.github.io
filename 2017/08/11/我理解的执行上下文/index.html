@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="js," />
 
 
 
@@ -93,18 +93,19 @@
 
 
 
-<meta name="description" content="执行上下文（Execution Context）当浏览器或者Node执行JS可执行代码的时候，会进入一个执行上下文，也就是执行环境，同时形成一个作用域。JS中的执行环境大概包含三种：  全局环境：JS代码运行时会首先进入到全局环境，唯一 函数环境：当函数被调用时，会进入当前的函数环境 eval  所以在一个JS程序中，必定会产生多个执行上下文。JS引擎会以堆栈的方式来处理这些执行上下文。栈底永远都">
+<meta name="description" content="执行上下文（Execution Context）当引擎执行JS代码的时候，会进入一些执行上下文，也就是执行环境。JS中的执行环境大概包含三种：  全局环境：JS代码运行时会首先进入到全局环境，唯一 函数环境：当函数被调用时，会进入当前的函数环境 eval">
+<meta name="keywords" content="js">
 <meta property="og:type" content="article">
 <meta property="og:title" content="我理解的执行上下文">
 <meta property="og:url" content="http://btfrankenstein.github.io/2017/08/11/我理解的执行上下文/index.html">
 <meta property="og:site_name" content="BtFrankenstein">
-<meta property="og:description" content="执行上下文（Execution Context）当浏览器或者Node执行JS可执行代码的时候，会进入一个执行上下文，也就是执行环境，同时形成一个作用域。JS中的执行环境大概包含三种：  全局环境：JS代码运行时会首先进入到全局环境，唯一 函数环境：当函数被调用时，会进入当前的函数环境 eval  所以在一个JS程序中，必定会产生多个执行上下文。JS引擎会以堆栈的方式来处理这些执行上下文。栈底永远都">
+<meta property="og:description" content="执行上下文（Execution Context）当引擎执行JS代码的时候，会进入一些执行上下文，也就是执行环境。JS中的执行环境大概包含三种：  全局环境：JS代码运行时会首先进入到全局环境，唯一 函数环境：当函数被调用时，会进入当前的函数环境 eval">
 <meta property="og:image" content="http://btfrankenstein.github.io/2017/08/11/我理解的执行上下文/estack.png">
 <meta property="og:image" content="http://btfrankenstein.github.io/2017/08/11/我理解的执行上下文/contextlife.png">
-<meta property="og:updated_time" content="2017-08-11T09:46:19.000Z">
+<meta property="og:updated_time" content="2017-08-11T10:01:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="我理解的执行上下文">
-<meta name="twitter:description" content="执行上下文（Execution Context）当浏览器或者Node执行JS可执行代码的时候，会进入一个执行上下文，也就是执行环境，同时形成一个作用域。JS中的执行环境大概包含三种：  全局环境：JS代码运行时会首先进入到全局环境，唯一 函数环境：当函数被调用时，会进入当前的函数环境 eval  所以在一个JS程序中，必定会产生多个执行上下文。JS引擎会以堆栈的方式来处理这些执行上下文。栈底永远都">
+<meta name="twitter:description" content="执行上下文（Execution Context）当引擎执行JS代码的时候，会进入一些执行上下文，也就是执行环境。JS中的执行环境大概包含三种：  全局环境：JS代码运行时会首先进入到全局环境，唯一 函数环境：当函数被调用时，会进入当前的函数环境 eval">
 <meta name="twitter:image" content="http://btfrankenstein.github.io/2017/08/11/我理解的执行上下文/estack.png">
 
 
@@ -322,29 +323,30 @@
       
 
       
-        <h2 id="执行上下文（Execution-Context）"><a href="#执行上下文（Execution-Context）" class="headerlink" title="执行上下文（Execution Context）"></a>执行上下文（Execution Context）</h2><p>当浏览器或者Node执行JS可执行代码的时候，会进入一个执行上下文，也就是执行环境，同时形成一个作用域。JS中的执行环境大概包含三种：</p>
+        <h2 id="执行上下文（Execution-Context）"><a href="#执行上下文（Execution-Context）" class="headerlink" title="执行上下文（Execution Context）"></a>执行上下文（Execution Context）</h2><p>当引擎执行JS代码的时候，会进入一些执行上下文，也就是执行环境。JS中的执行环境大概包含三种：</p>
 <ol>
 <li>全局环境：JS代码运行时会首先进入到全局环境，唯一</li>
 <li>函数环境：当函数被调用时，会进入当前的函数环境</li>
 <li>eval</li>
 </ol>
-<p>所以在一个JS程序中，必定会产生多个执行上下文。JS引擎会以堆栈的方式来处理这些执行上下文。栈底永远都是全局上下文，当执行流进入一个函数时，函数的环境就会被推入一个环境栈中（execution stack）。在函数执行完后，栈将其环境弹出，把控制权返回给之前的执行环境。而全局上下文则会在浏览器窗口关闭后出栈。</p>
+<a id="more"></a>
+<p>所以在一个JS程序中，必定会产生多个执行上下文。JS引擎会以 <strong>堆栈</strong> 的方式来处理这些执行上下文。栈底永远都是全局上下文，当执行流进入一个函数时，函数的环境就会被推入一个执行上下文栈中（execution context stack）。在函数执行完后，栈将其环境弹出，把控制权返回给之前的执行环境。而全局上下文则会在浏览器窗口关闭后出栈。</p>
 <p>以下面的代码为例，结合图示说明：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> color = <span class="string">'blue'</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">changeColor</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> anotherColor = <span class="string">'red'</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">swapColors</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> tempColor = anotherColor;</div><div class="line">        anotherColor = color;</div><div class="line">        color = tempColor;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    swapColors();</div><div class="line">&#125;</div><div class="line"></div><div class="line">changeColor();</div></pre></td></tr></table></figure>
 <p>整个过程如下图：</p>
 <img src="/2017/08/11/我理解的执行上下文/estack.png" alt="EStack" title="EStack">
 <p><em>图片来源  <a href="http://www.jianshu.com/p/a6d37c77e8db" target="_blank" rel="external">前端基础进阶（二）：执行上下文详细图解</a></em></p>
 <p>采用伪代码的表现方式可以写成：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ExecutionContextStack = [];</div><div class="line">ExecutionContextStack.push(GlobalContext);</div><div class="line">ExecutionContextStack.push(changeColorContext);</div><div class="line">ExecutionContextStack.push(swapColorsContext);</div><div class="line">ExecutionContextStack.pop(swapColorsContext);</div><div class="line">ExecutionContextStack.pop(changeColorContext);</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 执行上下文栈可以定义成一个数组</span></div><div class="line">ExecutionContextStack = [];</div><div class="line">ExecutionContextStack.push(GlobalContext); <span class="comment">// 入栈</span></div><div class="line">ExecutionContextStack.push(changeColorContext);</div><div class="line">ExecutionContextStack.push(swapColorsContext);</div><div class="line">ExecutionContextStack.pop(swapColorsContext); <span class="comment">// 出栈</span></div><div class="line">ExecutionContextStack.pop(changeColorContext);</div><div class="line"></div><div class="line"><span class="comment">// 如果有后续的代码，继续执行。但是栈底，或者ExecutionContextStack[]，永远有一个全局上下文。除非关闭浏览器</span></div></pre></td></tr></table></figure>
 <p>执行上下文的生命周期分为两个阶段</p>
 <ul>
-<li>创建阶段 - 首先会创建一个变量对象，接着作用域链被初始化，this的值也确定下来</li>
+<li>创建阶段 - 首先会创建一个 <code>变量对象</code>（VariableObject），接着<code>作用域链</code>被（scopeChain）初始化，<code>this</code> 的值也确定下来</li>
 <li>执行阶段 - 完成变量赋值，函数引用，执行代码</li>
 </ul>
 <img src="/2017/08/11/我理解的执行上下文/contextlife.png" alt="contextlife" title="contextlife">
 <p><em>图片来源  <a href="http://www.jianshu.com/p/330b1505e41d" target="_blank" rel="external">前端基础进阶（三）：变量对象详解 - 简书</a></em></p>
 <p>采用伪代码的表现方式可以写成：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">ExecutionContextStack = [GlobalContext, someFunctionContext];</div><div class="line">someFunctionContext = &#123;</div><div class="line">  <span class="attr">VariableObject</span>: &#123; <span class="comment">// 变量对象</span></div><div class="line">    <span class="built_in">arguments</span>: &#123;...&#125;, <span class="comment">// arguments对象</span></div><div class="line">    <span class="function"><span class="keyword">function</span>: &lt;<span class="title">function</span> <span class="title">reference</span>&gt;, // 函数属性 <span class="title">function</span>地址的引用</span></div><div class="line">	  <span class="title">variable</span>: <span class="title">undefined</span>, // <span class="title">variable</span>变量属性</div><div class="line">  &#125;,</div><div class="line">  <span class="title">scopeChain</span>: &#123;&#125;,</div><div class="line">  <span class="attr">this</span>: &#123;&#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">ExecutionContextStack = [GlobalContext, someFunctionContext]; <span class="comment">// 执行上下文栈</span></div><div class="line">someFunctionContext = &#123; <span class="comment">// 某个函数的执行上下文</span></div><div class="line">  VariableObject: &#123; <span class="comment">// 变量对象</span></div><div class="line">    <span class="built_in">arguments</span>: &#123;...&#125;, <span class="comment">// arguments对象</span></div><div class="line">    <span class="function"><span class="keyword">function</span>: &lt;<span class="title">function</span> <span class="title">reference</span>&gt;, // 函数属性 <span class="title">function</span>地址的引用</span></div><div class="line">	  <span class="title">variable</span>: <span class="title">undefined</span>, // <span class="title">variable</span>变量属性</div><div class="line">  &#125;,</div><div class="line">  <span class="title">scopeChain</span>: &#123;&#125;,</div><div class="line">  <span class="attr">this</span>: &#123;&#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -371,6 +373,12 @@
     </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+        </div>
       
 
       
@@ -469,6 +477,15 @@
 
           
 
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
           
 
         </nav>
