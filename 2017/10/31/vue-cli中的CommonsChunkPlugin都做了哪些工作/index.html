@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="webpack,vue," />
 
 
 
@@ -93,12 +93,19 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="BtFrankenstein">
-<meta property="og:url" content="http://btfrankenstein.github.io/index.html">
+<meta name="description" content="vue-cli中的CommonsChunkPlugin下图是使用 vue-cli 构建之后，webpack.prod.conf.js 中有关 CommonsChunkPlugin 的代码块。可以看到 new 了两次 CommonsChunkPlugin。为什么要 new 两次呢？这两次的作用分别是什么呢？  第一次 new webpack.optimize.CommonsChunkPluginwe">
+<meta name="keywords" content="webpack,vue">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vue-cli中的CommonsChunkPlugin都做了哪些工作">
+<meta property="og:url" content="http://btfrankenstein.github.io/2017/10/31/vue-cli中的CommonsChunkPlugin都做了哪些工作/index.html">
 <meta property="og:site_name" content="BtFrankenstein">
+<meta property="og:description" content="vue-cli中的CommonsChunkPlugin下图是使用 vue-cli 构建之后，webpack.prod.conf.js 中有关 CommonsChunkPlugin 的代码块。可以看到 new 了两次 CommonsChunkPlugin。为什么要 new 两次呢？这两次的作用分别是什么呢？  第一次 new webpack.optimize.CommonsChunkPluginwe">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4048883-d1c0eea95344cafc.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-10-31T07:54:19.329Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="BtFrankenstein">
+<meta name="twitter:title" content="vue-cli中的CommonsChunkPlugin都做了哪些工作">
+<meta name="twitter:description" content="vue-cli中的CommonsChunkPlugin下图是使用 vue-cli 构建之后，webpack.prod.conf.js 中有关 CommonsChunkPlugin 的代码块。可以看到 new 了两次 CommonsChunkPlugin。为什么要 new 两次呢？这两次的作用分别是什么呢？  第一次 new webpack.optimize.CommonsChunkPluginwe">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/4048883-d1c0eea95344cafc.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -126,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://btfrankenstein.github.io/"/>
+  <link rel="canonical" href="http://btfrankenstein.github.io/2017/10/31/vue-cli中的CommonsChunkPlugin都做了哪些工作/"/>
 
 
 
 
 
-  <title>BtFrankenstein</title>
+  <title>vue-cli中的CommonsChunkPlugin都做了哪些工作 | BtFrankenstein</title>
   
 
 
@@ -157,9 +164,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -242,9 +247,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -270,9 +275,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/31/vue-cli中的CommonsChunkPlugin都做了哪些工作/" itemprop="url">vue-cli中的CommonsChunkPlugin都做了哪些工作</a></h1>
+          <h1 class="post-title" itemprop="name headline">vue-cli中的CommonsChunkPlugin都做了哪些工作</h1>
         
 
         <div class="post-meta">
@@ -319,9 +322,7 @@
       
 
       
-        
-          
-            <h2 id="vue-cli中的CommonsChunkPlugin"><a href="#vue-cli中的CommonsChunkPlugin" class="headerlink" title="vue-cli中的CommonsChunkPlugin"></a>vue-cli中的CommonsChunkPlugin</h2><p>下图是使用 <code>vue-cli</code> 构建之后，<code>webpack.prod.conf.js</code> 中有关 <code>CommonsChunkPlugin</code> 的代码块。可以看到 <code>new</code> 了两次 <code>CommonsChunkPlugin</code>。为什么要 <code>new</code> 两次呢？这两次的作用分别是什么呢？</p>
+        <h2 id="vue-cli中的CommonsChunkPlugin"><a href="#vue-cli中的CommonsChunkPlugin" class="headerlink" title="vue-cli中的CommonsChunkPlugin"></a>vue-cli中的CommonsChunkPlugin</h2><p>下图是使用 <code>vue-cli</code> 构建之后，<code>webpack.prod.conf.js</code> 中有关 <code>CommonsChunkPlugin</code> 的代码块。可以看到 <code>new</code> 了两次 <code>CommonsChunkPlugin</code>。为什么要 <code>new</code> 两次呢？这两次的作用分别是什么呢？</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/4048883-d1c0eea95344cafc.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Jietu20171031-133902.jpg"></p>
 <h2 id="第一次-new-webpack-optimize-CommonsChunkPlugin"><a href="#第一次-new-webpack-optimize-CommonsChunkPlugin" class="headerlink" title="第一次 new webpack.optimize.CommonsChunkPlugin"></a>第一次 new webpack.optimize.CommonsChunkPlugin</h2><p><code>webpack</code> 官网对 <code>CommonsChunkPlugin</code> 配置项的解释</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">name</span>: string,</div><div class="line">  <span class="comment">// common chunk的名称</span></div><div class="line"></div><div class="line">  minChunks: number|<span class="literal">Infinity</span>|<span class="function"><span class="keyword">function</span>(<span class="params">module, count</span>)</span>&#123;&#125;,</div><div class="line">  <span class="comment">// 官方翻译是在传入公共chunk(commons chunk) 之前所需要包含的最少数量的chunks</span></div><div class="line">  <span class="comment">// 个人理解如果 `number` = 3， 说明被加入到common chunks里的模块要至少被三个chunk或者entries共享</span></div><div class="line">  <span class="comment">// 传入 `Infinity` 会马上生成 公共chunk，但里面没有模块。</span></div><div class="line">  <span class="comment">// 可以传入函数，定制自己的逻辑</span></div><div class="line">&#125;</div><div class="line"><span class="string">``</span><span class="string">` </span></div><div class="line">`vue-cli<span class="string">` 里的 `</span>minChunks<span class="string">` 使用的是函数模式，那这个函数又代表了什么呢？继续看官网解释。</span></div><div class="line"></div><div class="line">调用的函数会传入 `<span class="built_in">module</span><span class="string">` 和 `</span>count<span class="string">` 参数。`</span><span class="built_in">module</span><span class="string">` 参数代表每个 `</span>chunk<span class="string">` 里的模块。`</span><span class="built_in">module</span><span class="string">` 拥有和 [NormalModule](https://github.com/webpack/webpack/blob/master/lib/NormalModule.js) 类似的特性, 它有两个很有用的属性:</span></div><div class="line"></div><div class="line">- `<span class="built_in">module</span>.context<span class="string">` : 保存这个模块的目录. 比如: '/my_project/node_modules/example-dependency'</span></div><div class="line">- `<span class="built_in">module</span>.resource<span class="string">` : 模块真正执行的文件名. 比如: '/my_project/node_modules/example-dependency/index.js'</span></div><div class="line"></div><div class="line">`count<span class="string">` 参数表示 `</span><span class="built_in">module</span><span class="string">` 被使用的 `</span>chunk<span class="string">` 数量。</span></div><div class="line"></div><div class="line">接下来看 `webpack<span class="string">` 配置文件中的第一个 `</span><span class="keyword">new</span><span class="string">` ：</span></div><div class="line"></div><div class="line">`<span class="string">``</span>javascript</div><div class="line"><span class="comment">// split vendor js into its own file</span></div><div class="line"><span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(&#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'vendor'</span>,</div><div class="line">  <span class="attr">minChunks</span>: <span class="function"><span class="keyword">function</span> (<span class="params">module, count</span>) </span>&#123;</div><div class="line">  <span class="comment">// any required modules inside node_modules are extracted to vendor</span></div><div class="line">  <span class="comment">// 翻译注释：所有被依赖的模块，如果它在node_modules目录中，都会被抽离出来放进 vendor.js 中</span></div><div class="line">  <span class="comment">// 如果模块有一个路径，而且在路径中有 js 文件，并且这个模块是属于 node_modules 中的模块</span></div><div class="line">  <span class="comment">// 那这个模块就会被抽离出来，放进名为 vendor 的这个chunk</span></div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      <span class="built_in">module</span>.resource &amp;&amp;</div><div class="line">      <span class="regexp">/\.js$/</span>.test(<span class="built_in">module</span>.resource) &amp;&amp;</div><div class="line">      <span class="built_in">module</span>.resource.indexOf(</div><div class="line">        path.join(__dirname, <span class="string">'../node_modules'</span>)</div><div class="line">      ) === <span class="number">0</span></div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;),</div></pre></td></tr></table></figure>
@@ -330,399 +331,74 @@
 <h2 id="第二次-new-webpack-optimize-CommonsChunkPlugin"><a href="#第二次-new-webpack-optimize-CommonsChunkPlugin" class="headerlink" title="第二次 new webpack.optimize.CommonsChunkPlugin"></a>第二次 new webpack.optimize.CommonsChunkPlugin</h2><p>在 <code>webpack</code> 的 <code>issue</code> 中有一个讨论 <a href="https://github.com/webpack/webpack/issues/1315" target="_blank" rel="external">#1315</a>。出现的问题是，当只改变业务代码之后打包，不仅 <code>app.[chunkhash].js</code> 的文件名的 <code>chunkhash</code> 变了（业务代码打包进 <code>app.[chunkhash].js</code> ），<code>vendor.[chunkhash].js</code> 的 <code>hash</code> 同样也改变了。这样缓存机制就失去了意义。所以第二次的 <code>new</code> 就是为了解决这个问题的。</p>
 <p>会出现这个问题的根本原因是 <code>webpack</code> 在同时使用 <code>[chunkhash]</code> 和代码分割功能的时候会生成 <code>webpack</code> 的 <code>runtime</code> 代码（它主要用来处理代码模块的映射关系），这意味着 <code>[chunkhash]</code> 每次构建都会改变。解决方案就是把这部分的 <code>runtime</code> 代码单独抽离出来生成单独的 <code>chunk</code>。通过给 <code>CommonsChunkPlugin</code> 传入多个名称来达到这个目的。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// extract webpack runtime and module manifest to its own file in order to</span></div><div class="line"><span class="comment">// prevent vendor hash from being updated whenever app bundle is updated</span></div><div class="line"><span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(&#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'manifest'</span>,</div><div class="line">  <span class="attr">chunks</span>: [<span class="string">'vendor'</span>]</div><div class="line">&#125;),</div></pre></td></tr></table></figure>
-          
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <div>
+      
+        
+
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://btfrankenstein.github.io/2017/08/11/我理解的执行上下文/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ZhangChengbin">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BtFrankenstein">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/11/我理解的执行上下文/" itemprop="url">我理解的执行上下文</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-11T17:39:43+08:00">
-                2017-08-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/webpack/" rel="tag"># webpack</a>
           
-            
+            <a href="/tags/vue/" rel="tag"># vue</a>
           
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      
 
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
       
-        
-          <h2 id="执行上下文（Execution-Context）"><a href="#执行上下文（Execution-Context）" class="headerlink" title="执行上下文（Execution Context）"></a>执行上下文（Execution Context）</h2><p>当引擎执行JS代码的时候，会进入一些执行上下文，也就是执行环境。JS中的执行环境大概包含三种：</p>
-<ol>
-<li>全局环境：JS代码运行时会首先进入到全局环境，唯一</li>
-<li>函数环境：当函数被调用时，会进入当前的函数环境</li>
-<li>eval</li>
-</ol>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/08/11/我理解的执行上下文/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/11/我理解的执行上下文/" rel="next" title="我理解的执行上下文">
+                <i class="fa fa-chevron-left"></i> 我理解的执行上下文
+              </a>
+            
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
 
-    <div>
-      
-    </div>
+          <span class="post-nav-divider"></span>
 
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://btfrankenstein.github.io/2017/07/19/Vue子组件中的props作为-input-元素的value值时遇到的问题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ZhangChengbin">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BtFrankenstein">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/19/Vue子组件中的props作为-input-元素的value值时遇到的问题/" itemprop="url">Vue子组件中的props作为input元素的value值时遇到的问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+          <div class="post-nav-prev post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-19T11:00:00+08:00">
-                2017-07-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>在项目中遇到一项需求。在父组件中异步请求一项数据，并且把这项数据传递到子组件中。组件中使用该数据作为 <code>&lt;input&gt;</code> 的 <code>value</code>，并且要求是响应式的。可以把代码简化成下面这个样子：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- 父组件 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span> <span class="attr">lang</span>=<span class="string">"html"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">input-drop</span> <span class="attr">:val</span>=<span class="string">"serviceName"</span>&gt;</span><span class="tag">&lt;/<span class="name">input-drop</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></div><div class="line">  import InputDrop from '../components/inputdropdown';</div><div class="line">  export default &#123;</div><div class="line">    data() &#123;</div><div class="line">      return &#123;</div><div class="line">        serviceName: '',</div><div class="line">      &#125;;</div><div class="line">    &#125;,</div><div class="line">    components: &#123;</div><div class="line">      InputDrop,</div><div class="line">    &#125;,</div><div class="line">    mounted() &#123;</div><div class="line">      setTimeout(() =&gt; &#123;</div><div class="line">        this.serviceName = 'vueService';</div><div class="line">      &#125;, 1000)</div><div class="line">    &#125;,</div><div class="line">  &#125;;</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- 子组件 inputdrop.vue --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span> <span class="attr">lang</span>=<span class="string">"html"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>&#123;&#123; val &#125;&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">v-model</span>=<span class="string">"val"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></div><div class="line">  export default &#123;</div><div class="line">    props: ['val'],</div><div class="line">  &#125;;</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/07/19/Vue子组件中的props作为-input-元素的value值时遇到的问题/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://btfrankenstein.github.io/2017/05/18/vue中监听window事件/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ZhangChengbin">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BtFrankenstein">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/18/vue中监听window事件/" itemprop="url">vue中监听window事件</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-18T12:03:05+08:00">
-                2017-05-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="vue-中监听-window事件"><a href="#vue-中监听-window事件" class="headerlink" title="vue 中监听 window事件"></a><code>vue</code> 中监听 <code>window</code>事件</h1><p>今天有需求是当PC用户在完成第三方支付之后，又在浏览器切换回我自己页面时，需要捕获用户回到页面的事件，进而自动刷新页面。</p>
-<p>思考过后发现使用 <code>window.onfocus</code> 可以达到这个需求。只是不知道 <code>vue</code> 的是如何监听 <code>window</code> 事件的。</p>
-<p>一开始一直想着用 <code>vue</code> 的 <code>v-on</code> 绑定在哪里监听，但是找不到方式。后来google了一下发现其实直接在 <code>ready</code> 的时候给 <code>window</code> 添加事件就好了，没必要使用 <code>v-on</code> 或者其他 <code>vue</code> 的方法。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/05/18/vue中监听window事件/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    <div class="post-spread">
       
     </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-  </section>
-
-  
+  </div>
 
 
           </div>
@@ -730,6 +406,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -749,8 +429,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -803,6 +492,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#vue-cli中的CommonsChunkPlugin"><span class="nav-number">1.</span> <span class="nav-text">vue-cli中的CommonsChunkPlugin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一次-new-webpack-optimize-CommonsChunkPlugin"><span class="nav-number">2.</span> <span class="nav-text">第一次 new webpack.optimize.CommonsChunkPlugin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二次-new-webpack-optimize-CommonsChunkPlugin"><span class="nav-number">3.</span> <span class="nav-text">第二次 new webpack.optimize.CommonsChunkPlugin</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -923,10 +628,10 @@
 
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 
