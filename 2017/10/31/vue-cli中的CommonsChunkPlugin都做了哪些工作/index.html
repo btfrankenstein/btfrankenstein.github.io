@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="BtFrankenstein">
 <meta property="og:description" content="最近有需求需要对 vue-cli 生成的项目需要做一些 webpack 构建速度方面的优化。要想优化，首先要明白 webpack 配置文件中各种配置的作用是什么。所以想写一系列文章来记录一下自己的研究过程。文章应该不会涵盖所有内容，只会对自己感兴趣的部分做记录和分析。 vue-cli中的CommonsChunkPlugin下图是使用 vue-cli 构建之后，webpack.prod.conf.j">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4048883-d1c0eea95344cafc.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-10-31T08:01:47.985Z">
+<meta property="og:updated_time" content="2017-11-01T03:31:41.352Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="vue-cli中的CommonsChunkPlugin都做了哪些工作">
 <meta name="twitter:description" content="最近有需求需要对 vue-cli 生成的项目需要做一些 webpack 构建速度方面的优化。要想优化，首先要明白 webpack 配置文件中各种配置的作用是什么。所以想写一系列文章来记录一下自己的研究过程。文章应该不会涵盖所有内容，只会对自己感兴趣的部分做记录和分析。 vue-cli中的CommonsChunkPlugin下图是使用 vue-cli 构建之后，webpack.prod.conf.j">
@@ -332,6 +332,8 @@
 <h2 id="第二次-new-webpack-optimize-CommonsChunkPlugin"><a href="#第二次-new-webpack-optimize-CommonsChunkPlugin" class="headerlink" title="第二次 new webpack.optimize.CommonsChunkPlugin"></a>第二次 new webpack.optimize.CommonsChunkPlugin</h2><p>在 <code>webpack</code> 的 <code>issue</code> 中有一个讨论 <a href="https://github.com/webpack/webpack/issues/1315" target="_blank" rel="external">#1315</a>。出现的问题是，当只改变业务代码之后打包，不仅 <code>app.[chunkhash].js</code> 的文件名的 <code>chunkhash</code> 变了（业务代码打包进 <code>app.[chunkhash].js</code> ），<code>vendor.[chunkhash].js</code> 的 <code>hash</code> 同样也改变了。这样缓存机制就失去了意义。所以第二次的 <code>new</code> 就是为了解决这个问题的。</p>
 <p>会出现这个问题的根本原因是 <code>webpack</code> 在同时使用 <code>[chunkhash]</code> 和代码分割功能的时候会生成 <code>webpack</code> 的 <code>runtime</code> 代码（它主要用来处理代码模块的映射关系），这意味着 <code>[chunkhash]</code> 每次构建都会改变。解决方案就是把这部分的 <code>runtime</code> 代码单独抽离出来生成单独的 <code>chunk</code>。通过给 <code>CommonsChunkPlugin</code> 传入多个名称来达到这个目的。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// extract webpack runtime and module manifest to its own file in order to</span></div><div class="line"><span class="comment">// prevent vendor hash from being updated whenever app bundle is updated</span></div><div class="line"><span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(&#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'manifest'</span>,</div><div class="line">  <span class="attr">chunks</span>: [<span class="string">'vendor'</span>]</div><div class="line">&#125;),</div></pre></td></tr></table></figure>
+<p>采用这种方式构建出来的文件会多一个 <code>manifest.[chunkhash].js</code> 文件，这个文件就只包含了 <code>runtime</code> 代码，这个文件的体积相当小，哪怕每次打包都会重新生成文件，对于加载时间的影响也可以忽略不计。这样 <code>vendor</code> 文件里就只剩下比较干净的依赖模块的代码。现在如果只改变业务代码，<code>vendor</code> 文件的 <code>hash</code> 是不会改变的。</p>
+
       
     </div>
 
