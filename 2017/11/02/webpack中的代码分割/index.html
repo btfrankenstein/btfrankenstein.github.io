@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4048883-1124cde4c1540723.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4048883-89f54c959706bb85.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4048883-e2ebfc13d0e0bc1c.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-11-02T03:43:30.303Z">
+<meta property="og:updated_time" content="2017-11-02T03:44:59.304Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webpack中的代码分割">
 <meta name="twitter:description" content="代码分割（code splitting）是webpack相当重要的一个特性。它可以让代码分割到不同的文件（bundle）中，以便按需或者并行加载这些文件。代码分割可以得到更小的文件，控制资源加载的优先级。如果使用得当，更是可以优化加载的时间。 这里先看一个使用 vue-cli 构建的实际项目打包出来的 bundle 都有什么  这里只关注 js 文件。可以看到除了上篇文章提到的 app、vendo">
@@ -331,6 +331,7 @@
 <p><img src="http://upload-images.jianshu.io/upload_images/4048883-c79585ccd83f64d1.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="项目构建结果"></p>
 <p>这里只关注 js 文件。可以看到除了上篇文章提到的 app、vendor、manifest文件，还有从0到7开头的 js 文件。这几个以数字开头的 js 文件是哪里来的，又有什么作用呢。这篇文章就是解答这个问题。</p>
 <h2 id="代码分割的方法"><a href="#代码分割的方法" class="headerlink" title="代码分割的方法"></a>代码分割的方法</h2><p>官网给出了三种常用的代码分割的方法</p>
+<a id="more"></a>
 <ul>
 <li>Entry Points：入口文件设置的时候可以配置</li>
 <li>CommonsChunkPlugin：上篇文章讲了一下应用，更详细的信息可以查看官网</li>
