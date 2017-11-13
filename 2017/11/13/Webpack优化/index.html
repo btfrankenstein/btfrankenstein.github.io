@@ -1,0 +1,718 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="webpack 升级 3.x根据官方的 release 声明，webpack 3.x 的一个显著特性是 Scope Hoisting。之前 webpack 构建时会把每个模块单独的放到一个闭包函数中，这会增加 javascript 的执行时间。 3.x 之后，webpack 则会将有联系的模块，放到一个大的闭包函数里面去，这样可以减少构建出来的文件大小和 javascript 的执行时间。要让 S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 vue-cli 构建项目中的 Webpack优化">
+<meta property="og:url" content="http://btfrankenstein.github.io/2017/11/13/Webpack优化/index.html">
+<meta property="og:site_name" content="BtFrankenstein">
+<meta property="og:description" content="webpack 升级 3.x根据官方的 release 声明，webpack 3.x 的一个显著特性是 Scope Hoisting。之前 webpack 构建时会把每个模块单独的放到一个闭包函数中，这会增加 javascript 的执行时间。 3.x 之后，webpack 则会将有联系的模块，放到一个大的闭包函数里面去，这样可以减少构建出来的文件大小和 javascript 的执行时间。要让 S">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4048883-089f6ffa9213a0ad.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-11-13T04:03:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 vue-cli 构建项目中的 Webpack优化">
+<meta name="twitter:description" content="webpack 升级 3.x根据官方的 release 声明，webpack 3.x 的一个显著特性是 Scope Hoisting。之前 webpack 构建时会把每个模块单独的放到一个闭包函数中，这会增加 javascript 的执行时间。 3.x 之后，webpack 则会将有联系的模块，放到一个大的闭包函数里面去，这样可以减少构建出来的文件大小和 javascript 的执行时间。要让 S">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/4048883-089f6ffa9213a0ad.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://btfrankenstein.github.io/2017/11/13/Webpack优化/"/>
+
+
+
+
+
+  <title>使用 vue-cli 构建项目中的 Webpack优化 | BtFrankenstein</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BtFrankenstein</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://btfrankenstein.github.io/2017/11/13/Webpack优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ZhangChengbin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BtFrankenstein">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用 vue-cli 构建项目中的 Webpack优化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-13T12:02:37+08:00">
+                2017-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="webpack-升级-3-x"><a href="#webpack-升级-3-x" class="headerlink" title="webpack 升级 3.x"></a>webpack 升级 3.x</h2><p><a href="https://medium.com/webpack/webpack-3-official-release-15fd2dd8f07b" target="_blank" rel="external">根据官方的 release 声明</a>，webpack 3.x 的一个显著特性是 <code>Scope Hoisting</code>。之前 webpack 构建时会把每个模块单独的放到一个闭包函数中，这会增加 javascript 的执行时间。 3.x 之后，webpack 则会将有联系的模块，放到一个大的闭包函数里面去，这样可以减少构建出来的文件大小和 javascript 的执行时间。要让 Scope Hoisting 起作用，只需要添加下面的插件：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  <span class="attr">plugins</span>: [</div><div class="line">    <span class="keyword">new</span> webpack.optimize.ModuleConcatenationPlugin()</div><div class="line">  ]</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>这条优化主要是针对 javascript 执行效率的，自己在项目中使用时，对于构建的时间并没有显著提升。</p>
+<h2 id="减小文件搜索范围"><a href="#减小文件搜索范围" class="headerlink" title="减小文件搜索范围"></a>减小文件搜索范围</h2><p>这一点的优化可以让 webpack 不必自己遍历去搜索模块，而可以通过我们定义的路径，快速定位模块。配置代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">resolve: &#123;</div><div class="line">  <span class="comment">//...</span></div><div class="line">  <span class="comment">// modules选项配置，指定node_modules文件夹所在的位置</span></div><div class="line">  <span class="comment">//节省webpack去查找的时间</span></div><div class="line">  modules: [resolve(<span class="string">'node_modules'</span>)], </div><div class="line">  <span class="attr">alias</span>: &#123;</div><div class="line">    <span class="comment">// vue-cli自带生成，'vue$' 表示严格匹配 'vue' 这个字段</span></div><div class="line">    <span class="string">'vue$'</span>: <span class="string">'vue/dist/vue.esm.js'</span>, </div><div class="line">    <span class="string">'@'</span>: resolve(<span class="string">'src'</span>), <span class="comment">// vue-cli自带生成</span></div><div class="line">    <span class="string">'api'</span>: resolve(<span class="string">'src/api'</span>)</div><div class="line">    <span class="comment">//... 其他配置</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>resolve.modules</code>是用来配置模块库（通常是 node_modules）所在的位置。默认的配置会采用向上递归搜索的方式去寻找，为了减少搜索范围，可以直接写明 node_modules 的全路径。</p>
+<p>而alias是指配置别名。通过编写alias，既能让webpack查找文件定位更快，在开发的时候，也能少些很多相对路径的<code>../..</code>，在引入模块的时候也会很方便。</p>
+<h2 id="运行时构建"><a href="#运行时构建" class="headerlink" title="运行时构建"></a>运行时构建</h2><p>Vue官网的安装指南里面有这么一段话</p>
+<blockquote>
+<p>当使用 vue-loader 或 vueify 的时候，*.vue 文件内部的模板会在构建时预编译成 JavaScript。你在最终打好的包里实际上是不需要编译器的，因为只是用运行时构建即可。<br>因为运行时构建相比完整版缩减了 30% 的体积，你应该尽可能使用这个版本。</p>
+</blockquote>
+<p>但是在 vue-cli 构建出来的项目配置中，我们发现它还是使用了完整版构建。那把它改正运行时构建会怎么样呢？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">resolve: &#123;</div><div class="line">  <span class="comment">//... </span></div><div class="line">  alias: &#123;</div><div class="line">    <span class="comment">/* vue-cli自带生成，'vue$' 表示严格匹配 'vue' 这个字段 */</span></div><div class="line">    <span class="comment">// 'vue$': 'vue/dist/vue.esm.js', /* 自带生成完整版 */</span></div><div class="line">    <span class="string">'vue$'</span>: <span class="string">'vue/dist/vue.runtime.esm.js'</span>, <span class="comment">/* 改为运行时 */</span></div><div class="line">    <span class="comment">//... </span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>npm run dev 之后会发现报了这么一个错</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4048883-089f6ffa9213a0ad.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="vue 报错"></p>
+<p>我们明明使用了 vue-loader，按照官网的描述，为什么还会提示需要 vue 包含编译器的版本呢？原因在于我们实例化 vue 的时候，还是使用了需要编译器的写法，在入口文件 main.js 最下面，找到实例化 vue 的代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* vue-cli 自动生成 */</span></div><div class="line"><span class="keyword">new</span> Vue(&#123;</div><div class="line">  <span class="attr">el</span>: <span class="string">'#app'</span>,</div><div class="line">  router,</div><div class="line">  store,</div><div class="line">  <span class="attr">template</span>: <span class="string">'&lt;App/&gt;'</span>,</div><div class="line">  <span class="attr">components</span>: &#123; App &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>为了能使用运行时构建，我们需要把代码改成不需要编译器的形式</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 修改之后 */</span></div><div class="line"><span class="keyword">new</span> Vue(&#123;</div><div class="line">  <span class="attr">el</span>: <span class="string">'#app'</span>,</div><div class="line">  router,</div><div class="line">  store,</div><div class="line">  <span class="comment">// template: '&lt;App/&gt;', /* 如果 Vue 选项中包含渲染函数，该模板将被忽略 */</span></div><div class="line">  <span class="comment">// components: &#123; App &#125;,</span></div><div class="line">  render: <span class="function"><span class="params">h</span> =&gt;</span> h(App), <span class="comment">// 使用render方式引入组件</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>修改之后，运行没有问题。通过这种修改方式，在项目里就可以用更小的 vue 文件进行构建了。</p>
+<h2 id="happypack"><a href="#happypack" class="headerlink" title="happypack"></a>happypack</h2><p>webpack 的构建是单进程的。采用 <code>happypack</code> 可以改为多进程构建，从而提高构建速度。但是我在项目中使用了之后，构建速度并没有网上描述的提升那么明显。</p>
+<p>首先安装：<code>npm install happypack --save-dev</code></p>
+<p>然后修改 webpack 配置文件：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> os = <span class="built_in">require</span>(<span class="string">'os'</span>);</div><div class="line"><span class="keyword">const</span> HappyPack  = <span class="built_in">require</span>(<span class="string">'happypack'</span>);</div><div class="line"><span class="keyword">const</span> happThreadPool = HappyPack.ThreadPool(&#123;<span class="attr">size</span>: os.cpus().length&#125;); <span class="comment">// 采用多进程，进程数由CPU核数决定</span></div><div class="line"><span class="comment">//...</span></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  <span class="attr">plugins</span>: [</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    <span class="keyword">new</span> HappyPack(&#123;</div><div class="line">      <span class="attr">id</span>: <span class="string">'js'</span>,</div><div class="line">      <span class="attr">cache</span>: <span class="literal">true</span>,</div><div class="line">      <span class="attr">loaders</span>: [<span class="string">'babel-loader?cacheDirectory=true'</span>], <span class="comment">// ?cacheDirectory=true 开启babel-loader的缓存</span></div><div class="line">      threadPool: happThreadPool</div><div class="line">    &#125;)</div><div class="line">  ],</div><div class="line">  <span class="attr">module</span>: &#123;</div><div class="line">    <span class="attr">rules</span>: [</div><div class="line">      &#123;</div><div class="line">        <span class="comment">// vue-loader 似乎有兼容性问题，故没有使用</span></div><div class="line">        test: <span class="regexp">/\.vue$/</span>,</div><div class="line">        <span class="attr">loader</span>: <span class="string">'vue-loader'</span>,</div><div class="line">        <span class="attr">options</span>: vueLoaderConfig ,</div><div class="line">      &#125;,</div><div class="line">      &#123;</div><div class="line">        <span class="attr">test</span>: <span class="regexp">/\.js$/</span>,</div><div class="line">        <span class="attr">loader</span>: [<span class="string">'happypack/loader?id=js'</span>], <span class="comment">// 将loader换成happypack</span></div><div class="line">        include: [resolve(<span class="string">'src'</span>)],</div><div class="line">      &#125;,</div><div class="line">    ]</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="DllPlugin和DllReferencePlugin"><a href="#DllPlugin和DllReferencePlugin" class="headerlink" title="DllPlugin和DllReferencePlugin"></a>DllPlugin和DllReferencePlugin</h2><p>在日常工作中，每当修改了业务代码之后，一些第三方的，体积比较大的模块也会被重新打包，极大的浪费了时间。这时我们就可以使用 <code>DLL</code> 预先把一些第三方模块提前打包，以后修改业务代码再构建时就不会构建这些模块了。所以，DLL 的作用，简单的说是把之前一步完成的构建分成了两步：</p>
+<ol>
+<li>将一些第三方的模块抽离出来（比如 vue、echarts、axios等），预先构建一遍</li>
+<li>构建其他模块和业务代码</li>
+</ol>
+<p>因为第三方的模块变动并不会频繁，在第一步构建之后的 bundle 就可以长期的放在项目里，后续的构建时只需要进行第二步，这样会节省大量的构建时间。</p>
+<p>在 <code>build</code> 文件夹里建立一个 <code>webpack.dll.conf.js</code>，我们将一些常用的依赖打包成dll。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">"path"</span>);</div><div class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">"webpack"</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  <span class="comment">// dll 包含模块的名字</span></div><div class="line">  entry: &#123;</div><div class="line">    <span class="attr">vendor</span>: [<span class="string">'vue/dist/vue.runtime.esm.js'</span>, <span class="string">'lodash'</span>, <span class="string">'vuex'</span>, <span class="string">'axios'</span>, <span class="string">'vue-router'</span>, <span class="string">'element-ui'</span>]</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">output</span>: &#123;</div><div class="line">    <span class="attr">path</span>: path.join(__dirname, <span class="string">'./static/js'</span>), </div><div class="line">    <span class="attr">filename</span>: <span class="string">'[name].dll.js'</span>,</div><div class="line">    <span class="comment">// 给DllPlugin中的name使用，需要和 webpack.DllPlugin 中的 name 字段保持一致</span></div><div class="line">    library: <span class="string">'[name]_library'</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">plugins</span>: [</div><div class="line">    <span class="keyword">new</span> webpack.DllPlugin(&#123;</div><div class="line">      <span class="attr">path</span>: path.join(__dirname, <span class="string">'.'</span>, <span class="string">'[name]-manifest.json'</span>),</div><div class="line">      <span class="comment">// 和上面的 library 保持一致</span></div><div class="line">      name: <span class="string">'[name]_library'</span>, </div><div class="line">      <span class="attr">context</span>: __dirname</div><div class="line">    &#125;),</div><div class="line">  ]</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>在 package.json 中加入：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="string">"scripts"</span>: &#123;</div><div class="line">    <span class="string">"dll"</span>: <span class="string">"webpack --config ./build/webpack.dll.config.js"</span></div><div class="line">  &#125;,</div></pre></td></tr></table></figure>
+<p>运行 <code>npm run dll</code> 之后，会在 <code>static/js</code> 文件夹下生成 <code>vender.dll.js</code>，会在 <code>build</code> 文件夹下生成 <code>vender-manifest.json</code>。这个 <code>vender-manifest.json</code> 会被 <code>webpack.base.config.js</code> 中加入的新插件 <code>DllReferencePlugin</code> 使用，以便于业务代码能正确地访问到构建好的第三方模块的。</p>
+<p>在 <code>webpack.base.config.js</code> 中，添加 <code>DllReferencePlugin</code>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  <span class="comment">//... 其他配置</span></div><div class="line">  </div><div class="line">  plugins: [</div><div class="line">    <span class="comment">// ... 其他插件</span></div><div class="line">    <span class="keyword">new</span> webpack.DllReferencePlugin(&#123;</div><div class="line">      <span class="attr">context</span>: __dirname,</div><div class="line">      <span class="attr">manifest</span>: <span class="built_in">require</span>(<span class="string">'./vendor-mainfest.json'</span>) <span class="comment">// 指向之前生成的 vendor-mainfest.json</span></div><div class="line">    &#125;)</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后，在项目输出的index.html里，最先引入这个js：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./static/js/vendor.dll.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/dist/build.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>这样只要第三方模块不变，我们之后的上线构建都不用运行 <code>npm run dll</code>了。只构建业务代码和一些体积比较小的包，构建速度是非常快的。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/02/webpack中的代码分割/" rel="next" title="webpack中的代码分割">
+                <i class="fa fa-chevron-left"></i> webpack中的代码分割
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="ZhangChengbin" />
+          <p class="site-author-name" itemprop="name">ZhangChengbin</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#webpack-升级-3-x"><span class="nav-number">1.</span> <span class="nav-text">webpack 升级 3.x</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#减小文件搜索范围"><span class="nav-number">2.</span> <span class="nav-text">减小文件搜索范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行时构建"><span class="nav-number">3.</span> <span class="nav-text">运行时构建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#happypack"><span class="nav-number">4.</span> <span class="nav-text">happypack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DllPlugin和DllReferencePlugin"><span class="nav-number">5.</span> <span class="nav-text">DllPlugin和DllReferencePlugin</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZhangChengbin</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
