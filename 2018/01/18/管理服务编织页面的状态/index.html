@@ -1,0 +1,755 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="之前的后台管理项目中，组件之间的状态管理大多采用的是 eventBus 或者 $emit $on的方式进行通信。在最近新上线的服务编织页面中，终于系统性的使用 vuex 进行状态管理。该篇文章是对使用的过程做一个记录员。 背景介绍先看一下服务编织页面的具体操作过程  页面大体上分为两个区域：  左侧列表区域，其中包含已购服务和编织历史两个 tab 页的内容 右侧编织区域。列表区域的已购服务标签内，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 vuex 管理服务编织页面的状态">
+<meta property="og:url" content="http://btfrankenstein.github.io/2018/01/18/管理服务编织页面的状态/index.html">
+<meta property="og:site_name" content="BtFrankenstein">
+<meta property="og:description" content="之前的后台管理项目中，组件之间的状态管理大多采用的是 eventBus 或者 $emit $on的方式进行通信。在最近新上线的服务编织页面中，终于系统性的使用 vuex 进行状态管理。该篇文章是对使用的过程做一个记录员。 背景介绍先看一下服务编织页面的具体操作过程  页面大体上分为两个区域：  左侧列表区域，其中包含已购服务和编织历史两个 tab 页的内容 右侧编织区域。列表区域的已购服务标签内，">
+<meta property="og:image" content="http://ovsnj3ch0.bkt.clouddn.com/Jan-12-2018 10-46-21.gif">
+<meta property="og:image" content="http://ovsnj3ch0.bkt.clouddn.com/Jietu20180112-180117.jpg">
+<meta property="og:image" content="http://ovsnj3ch0.bkt.clouddn.com/Jan-15-2018 16-05-23.gif">
+<meta property="og:updated_time" content="2018-01-18T06:29:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 vuex 管理服务编织页面的状态">
+<meta name="twitter:description" content="之前的后台管理项目中，组件之间的状态管理大多采用的是 eventBus 或者 $emit $on的方式进行通信。在最近新上线的服务编织页面中，终于系统性的使用 vuex 进行状态管理。该篇文章是对使用的过程做一个记录员。 背景介绍先看一下服务编织页面的具体操作过程  页面大体上分为两个区域：  左侧列表区域，其中包含已购服务和编织历史两个 tab 页的内容 右侧编织区域。列表区域的已购服务标签内，">
+<meta name="twitter:image" content="http://ovsnj3ch0.bkt.clouddn.com/Jan-12-2018 10-46-21.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://btfrankenstein.github.io/2018/01/18/管理服务编织页面的状态/"/>
+
+
+
+
+
+  <title>使用 vuex 管理服务编织页面的状态 | BtFrankenstein</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BtFrankenstein</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://btfrankenstein.github.io/2018/01/18/管理服务编织页面的状态/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ZhangChengbin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BtFrankenstein">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用 vuex 管理服务编织页面的状态</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-18T14:27:32+08:00">
+                2018-01-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>之前的后台管理项目中，组件之间的状态管理大多采用的是 <code>eventBus</code> 或者 <code>$emit</code> <code>$on</code>的方式进行通信。在最近新上线的服务编织页面中，终于系统性的使用 <code>vuex</code> 进行状态管理。该篇文章是对使用的过程做一个记录员。</p>
+<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>先看一下服务编织页面的具体操作过程</p>
+<p><img src="http://ovsnj3ch0.bkt.clouddn.com/Jan-12-2018 10-46-21.gif" alt="Jan-12-2018 10-46-21"></p>
+<p>页面大体上分为两个区域：</p>
+<ol>
+<li>左侧列表区域，其中包含<code>已购服务</code>和<code>编织历史</code>两个 tab 页的内容</li>
+<li>右侧编织区域。列表区域的<code>已购服务</code>标签内，可以选择想要拖拽的服务，如果该服务可以被拖拽到编织区域，则编织区域显示蓝色，相反则显示红色；<code>编织历史</code>标签内则可以选择编织历史，编织区域会加载改编织历史所包含的服务</li>
+</ol>
+<p>文件组织结构如下图：</p>
+<p><img src="http://ovsnj3ch0.bkt.clouddn.com/Jietu20180112-180117.jpg" alt="Jietu20180112-180117"></p>
+<p>在项目结构上，左侧列表区域拆分成了两个子组件，<code>serviceList</code> 和 <code>weaveList</code>。右侧编织区域包括底部<code>出参/入参</code>部分拆分为 <code>weaveArea</code> 子组件。其他部分比如输入框、按钮和编织名称等内容，作为该页面的 <code>index</code> 父组件。<code>weaveTest</code> 和 <code>serviceListItem</code> 本文不用关注。</p>
+<p>这种情况下就会涉及到兄弟组件之间的参数传递和状态管理，因此可以系统的使用 vuex 来对该模块进行状态管理了。</p>
+<h2 id="store-内容"><a href="#store-内容" class="headerlink" title="$store 内容"></a>$store 内容</h2><p>store/modules/weave.js 文件是一个 vuex 的 store 模块。该模块包含服务编织页面所需要的 state、mutations、actions。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// store/modules/weave.js</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> weave = &#123;</div><div class="line">  <span class="attr">state</span>: &#123;</div><div class="line">    <span class="attr">weaveAreaServiceList</span>: [], <span class="comment">// 已经移动到编织区域的服务列表</span></div><div class="line">    userServiceList: [], <span class="comment">// 选择的用户的已购服务列表</span></div><div class="line">    movedItemId: <span class="string">''</span>, <span class="comment">// 拖拽的那个服务的id</span></div><div class="line">    movedItemPutAbility: <span class="literal">true</span>, <span class="comment">// 拖拽的服务是否能放入到编织区域</span></div><div class="line">    weaveAreaClass: &#123; <span class="comment">// 编织区域样式</span></div><div class="line">      placeAble: <span class="literal">false</span>,</div><div class="line">      <span class="attr">unplaceAble</span>: <span class="literal">false</span>,</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">postAreaParams</span>: &#123; <span class="comment">// 编织后出参/入参区域的数据</span></div><div class="line">      inParams: [],</div><div class="line">      <span class="attr">outParams</span>: [],</div><div class="line">    &#125;,</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">mutations</span>: &#123;</div><div class="line">    SET_WeaveAreaServiceLIST(state, list) &#123;</div><div class="line">      state.weaveAreaServiceList = list;</div><div class="line">    &#125;,</div><div class="line">    SET_MOVED_ITEM_ID(state, id) &#123;</div><div class="line">      state.movedItemId = id;</div><div class="line">    &#125;,</div><div class="line">    <span class="comment">// 省略类似的方法</span></div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">actions</span>: &#123;</div><div class="line">    updateWeaveAreaServiceList(&#123; commit &#125;, list) &#123;</div><div class="line">      commit(<span class="string">'SET_WeaveAreaServiceLIST'</span>, list);</div><div class="line">    &#125;,</div><div class="line">    updateMovedItem(&#123; commit &#125;, id) &#123;</div><div class="line">      commit(<span class="string">'SET_MOVED_ITEM_ID'</span>, id);</div><div class="line">    &#125;,</div><div class="line">    <span class="comment">// 省略类似的方法</span></div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;,</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> weave;</div></pre></td></tr></table></figure>
+<p>了解 vuex 的人应该都知道，更改 state 对象中的值的最佳方法是在页面上 dispatch 某个 action，再由 action 触发 mutation，最终由 mutation 来改变 state。一是可以方便地跟踪每一个状态的变化，二是可以处理异步事务。这里 state 中的每个参数所代表的含义已经写在注释里了。这里解释一下问什么需要这几个状态。</p>
+<ul>
+<li>weaveAreaServiceList：记录已经移动到编织区域的服务 id 列表，列表的 DOM 渲染依赖该变量。同时可以通过数组的 indexOf 方法确保编织区域的每个服务只存在一个。也可以根据需要重置或修改编织区域内容。</li>
+<li>userServiceList：每当切换用户的时候，父组件中把后端接口返回的该用户的服务列表传递给服务列表组件，用来更新或清除服务列表内容。</li>
+<li>movedItemPutAbility：拖拽的服务是否能放入到编织区域。拖拽插件的回调函数中使用。如果为 true，拖拽项可被放入；为 false，拖拽项不可被放入。</li>
+<li>movedItemId：拖拽某个服务时，记录该服务 id。一是保证编织区域的每个服务只存在一个，二是每次拖拽结束后，可以向 weaveAreaServiceList 添加该服务 id，用来组成已经移动到编织区域的服务 id 列表。</li>
+<li>weaveAreaClass：用来提示用户，如果拖拽的服务可以被放入编织区域，编织区域背景色会变成蓝色。否则会变成红色。该变量用来决定 class 的名字。</li>
+<li>postAreaParams：记录编织会在页面底部显示出参/入参的数据。</li>
+</ul>
+<h2 id="新建服务编织的实现过程"><a href="#新建服务编织的实现过程" class="headerlink" title="新建服务编织的实现过程"></a>新建服务编织的实现过程</h2><p>整个操作大概可以分五步</p>
+<ol>
+<li>选择用户时</li>
+<li>拖拽开始时</li>
+<li>拖拽过程中</li>
+<li>拖拽结束时</li>
+<li>在编织区域点击删除服务按钮时</li>
+</ol>
+<p>下面对每一步中涉及到的 vuex 中的 state 进行详细说明</p>
+<h4 id="选择用户时"><a href="#选择用户时" class="headerlink" title="选择用户时"></a>选择用户时</h4><p>在输入框输入用户名，选择下拉列表中的某个用户时，会更新 userServiceList 为选定用户的服务列表，从而渲染出左侧的已购服务列表。</p>
+<h4 id="拖拽开始时"><a href="#拖拽开始时" class="headerlink" title="拖拽开始时"></a>拖拽开始时</h4><p>会有四个方面的操作：</p>
+<ol>
+<li>如果编织区域没有服务，更新 weaveAreaClass，使得编织区域背景色变成<code>蓝色</code>，表示可被放入编织区域。</li>
+<li>如果编织区域有服务，并且有正在拖拽的服务，更新 weaveAreaClass 变量，使得编织区域背景色变成<code>红色</code>，表示不可被放入编织区域。</li>
+<li>则调用后端接口，并且没有正在拖拽的服务，则根据接口的返回来更新 movedItemPutAbility 的值，插件可用该变量来控制该服务能否被放入编织区域。同时更新 weaveAreaClass，用来控制编织区域的颜色。</li>
+<li>更新 movedItemId 为当前拖拽服务的 id。</li>
+</ol>
+<h4 id="拖拽过程中"><a href="#拖拽过程中" class="headerlink" title="拖拽过程中"></a>拖拽过程中</h4><p>拖拽过程中<strong>刚进入到编织区域</strong>时，在拖拽插件提供的 <code>put()</code> 回调函数中，需要根据 movedItemPutAbility、weaveAreaServiceList 和 movedItemId 来综合判断拖拽项能否被放入编织区域。代码如下：</p>
+   <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"> put () &#123;</div><div class="line">   <span class="keyword">const</span> putAbility = (<span class="keyword">this</span>.weaveAreaServiceList.indexOf(<span class="keyword">this</span>.movedItemId) === <span class="number">-1</span>) &amp;&amp; <span class="keyword">this</span>.movedItemPutAbility;</div><div class="line">   </div><div class="line">   <span class="comment">// 返回 true：可被放入；返回 false：不能放入</span></div><div class="line">   <span class="keyword">return</span> putAbility;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="拖拽结束时"><a href="#拖拽结束时" class="headerlink" title="拖拽结束时"></a>拖拽结束时</h4><p>如果服务被添加进了编织区域：</p>
+<ol>
+<li>更新 weaveAreaServiceList 数组，<code>push()</code> 进当前拖拽服务的 movedItemId。</li>
+<li>更新 postAreaParams 为当前编织的出参/入参数据。</li>
+<li>更新 weaveAreaClass，取消掉编织区域背景的蓝色或红色，使其恢复默认的样式。</li>
+</ol>
+<p>如果服务无法被添加进编织区域，只会更新 weaveAreaClass，取消掉编织区域背景的蓝色或红色，使其恢复默认的样式。</p>
+<h4 id="点击删除按钮时"><a href="#点击删除按钮时" class="headerlink" title="点击删除按钮时"></a>点击删除按钮时</h4><p>在编织区域点击删除服务按钮时，会更新 weaveAreaServiceList 数组，<code>splice()</code> 掉被删除的服务的 id。</p>
+<p>当编织区域的所有服务都被删除时：</p>
+<ol>
+<li>weaveAreaServiceList 会变成空数组。</li>
+<li>更新 movedItemPutAbility 为 true，因为此时任何一个服务都可以被拖拽进编织区域。</li>
+<li>重置 postAreaParams 为空，因为此时编织后的出参/入参为空。</li>
+</ol>
+<h2 id="另一种情况-编织历史"><a href="#另一种情况-编织历史" class="headerlink" title="另一种情况 - 编织历史"></a>另一种情况 - 编织历史</h2><p>上面的实现过程只是用户从头开始建立一个编织的过程。但是服务编织还有另外一个需求，就是从之前的编织历史中加载规则，并且可以对该规则进行调整从而创建一个新的编织。具体过程如下图：</p>
+<p><img src="http://ovsnj3ch0.bkt.clouddn.com/Jan-15-2018 16-05-23.gif" alt="Jan-15-2018 16-05-23"></p>
+<p>这种情况下，$store 中的 state 会增加一个变量：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// store/modules/weave.js</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> weave = &#123;</div><div class="line">  <span class="attr">state</span>: &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    weavedList, <span class="comment">// 编织历史中的服务列表</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">mutations</span>: &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    SET_WEAVED_LIST(state, list) &#123;</div><div class="line">      state.weavedList = list;</div><div class="line">    &#125;,</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">actions</span>: &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    updateWeavedList(&#123; commit &#125;, list) &#123;</div><div class="line">      commit(<span class="string">'SET_WEAVED_LIST'</span>, list);</div><div class="line">    &#125;,</div><div class="line">  &#125;,</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> weave;</div></pre></td></tr></table></figure>
+<p>加载编织历史的过程大概可以分成三步：</p>
+<ol>
+<li>点击编织历史</li>
+<li>为编织区域添加服务</li>
+<li>删除编织区域服务</li>
+</ol>
+<h4 id="点击编织历史"><a href="#点击编织历史" class="headerlink" title="点击编织历史"></a>点击编织历史</h4><ol>
+<li>更新 weavedList，根据接口返回的数据给 weavedList 赋值，根据该值来渲染编织区域的服务。</li>
+<li>更新 postAreaParams，同样也是根据接口返回的数据赋值。</li>
+<li>重置 weaveAreaServiceList 为空数组，因为此时编织区域的服务列表并不是由 weaveAreaServiceList 渲染的。如果不重置，编织区域会保留之前拖拽操作的服务。</li>
+</ol>
+<p>为编织区域添加服务和删除编织区域服务的过程，同上面新建服务编织中的拖拽和删除过程相同，这里就不重复说明了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我个人的一个感觉是不要为了用 vuex 而用 vuex。就拿 SDMK 的后台项目来说，它虽然比较庞大，十几个业务模块，但业务之间的耦合度是很低的，每个业务模块几乎是独立的，而且几乎没有兄弟组件之间的状态传递。所以之前的业务没有使用 vuex 来存储data，每个页面里存放自己的 data 就行。</p>
+<p>但是服务编织和之前的业务模块还是有区别，很重要的原因一是涉及到了兄弟组件之间的状态传递，二是状态在组件之间传递非常频繁，需要时刻监控这些状态。使用 vuex 可以很方方便的管理和追踪这些状态。具体当然还是要结合自己的业务场景的。总之还是那句话，不要为了用 vuex 而用 vuex。</p>
+<p>当然要实现整个服务编织的功能，还会有大量页面逻辑方面的工作。但是跟 vuex 关系不大，就不在本文介绍了。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/13/Webpack优化/" rel="next" title="使用 vue-cli 构建项目中的 Webpack优化">
+                <i class="fa fa-chevron-left"></i> 使用 vue-cli 构建项目中的 Webpack优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="ZhangChengbin" />
+          <p class="site-author-name" itemprop="name">ZhangChengbin</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景介绍"><span class="nav-number">1.</span> <span class="nav-text">背景介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#store-内容"><span class="nav-number">2.</span> <span class="nav-text">$store 内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建服务编织的实现过程"><span class="nav-number">3.</span> <span class="nav-text">新建服务编织的实现过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#选择用户时"><span class="nav-number">3.0.1.</span> <span class="nav-text">选择用户时</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拖拽开始时"><span class="nav-number">3.0.2.</span> <span class="nav-text">拖拽开始时</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拖拽过程中"><span class="nav-number">3.0.3.</span> <span class="nav-text">拖拽过程中</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拖拽结束时"><span class="nav-number">3.0.4.</span> <span class="nav-text">拖拽结束时</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#点击删除按钮时"><span class="nav-number">3.0.5.</span> <span class="nav-text">点击删除按钮时</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#另一种情况-编织历史"><span class="nav-number">4.</span> <span class="nav-text">另一种情况 - 编织历史</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#点击编织历史"><span class="nav-number">4.0.1.</span> <span class="nav-text">点击编织历史</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZhangChengbin</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
