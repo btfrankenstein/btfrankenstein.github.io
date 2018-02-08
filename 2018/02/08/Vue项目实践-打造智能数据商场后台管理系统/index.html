@@ -1,0 +1,733 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Smart Data Market 以下简称（SDMK）是 TalkingData 作为数据行业的先行者推出的智能数据服务商城。SDMK 在之前有一个1.0版的后台管理系统。但是随着业务和需求的增加，以及公司前端技术栈的统一。我们使用 Vue 重构了之前的系统，命名为 SDMK-ADMIN，同时也根据需求增加新功能。下图是 SDMK-ADMIN 的基本页面样式  目录结构1234567891011">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue项目实践-打造智能数据商场后台管理系统">
+<meta property="og:url" content="http://btfrankenstein.github.io/2018/02/08/Vue项目实践-打造智能数据商场后台管理系统/index.html">
+<meta property="og:site_name" content="BtFrankenstein">
+<meta property="og:description" content="Smart Data Market 以下简称（SDMK）是 TalkingData 作为数据行业的先行者推出的智能数据服务商城。SDMK 在之前有一个1.0版的后台管理系统。但是随着业务和需求的增加，以及公司前端技术栈的统一。我们使用 Vue 重构了之前的系统，命名为 SDMK-ADMIN，同时也根据需求增加新功能。下图是 SDMK-ADMIN 的基本页面样式  目录结构1234567891011">
+<meta property="og:image" content="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171023-100652.jpg">
+<meta property="og:image" content="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171023-105957.jpg">
+<meta property="og:image" content="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171019-112608.jpg">
+<meta property="og:image" content="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171019-115932.jpg">
+<meta property="og:image" content="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171019-140936.jpg">
+<meta property="og:image" content="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171020-111157.jpg">
+<meta property="og:updated_time" content="2018-02-08T03:42:18.581Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue项目实践-打造智能数据商场后台管理系统">
+<meta name="twitter:description" content="Smart Data Market 以下简称（SDMK）是 TalkingData 作为数据行业的先行者推出的智能数据服务商城。SDMK 在之前有一个1.0版的后台管理系统。但是随着业务和需求的增加，以及公司前端技术栈的统一。我们使用 Vue 重构了之前的系统，命名为 SDMK-ADMIN，同时也根据需求增加新功能。下图是 SDMK-ADMIN 的基本页面样式  目录结构1234567891011">
+<meta name="twitter:image" content="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171023-100652.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://btfrankenstein.github.io/2018/02/08/Vue项目实践-打造智能数据商场后台管理系统/"/>
+
+
+
+
+
+  <title>Vue项目实践-打造智能数据商场后台管理系统 | BtFrankenstein</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BtFrankenstein</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://btfrankenstein.github.io/2018/02/08/Vue项目实践-打造智能数据商场后台管理系统/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ZhangChengbin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BtFrankenstein">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Vue项目实践-打造智能数据商场后台管理系统</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-08T11:41:03+08:00">
+                2018-02-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Smart Data Market 以下简称（SDMK）是 TalkingData 作为数据行业的先行者推出的智能数据服务商城。SDMK 在之前有一个1.0版的后台管理系统。但是随着业务和需求的增加，以及公司前端技术栈的统一。我们使用 Vue 重构了之前的系统，命名为 SDMK-ADMIN，同时也根据需求增加新功能。下图是 SDMK-ADMIN 的基本页面样式</p>
+<p><img src="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171023-100652.jpg" alt="Jietu20171023-100652"></p>
+<h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">├── build                      // Webpack构建配置相关</div><div class="line">├── config                     // Webpack环境配置相关</div><div class="line">├── src                        // 源代码</div><div class="line">│   ├── assets                 // 图片、样式、js等静态资源</div><div class="line">│   ├── components             // 组件相关</div><div class="line">│   ├── models                 // api请求相关文件</div><div class="line">│   ├── router                 // 路由</div><div class="line">│   ├── views                  // 视图层</div><div class="line">│   ├── app.vue                // 入口页面</div><div class="line">│   └── main.js                // 入口文件，Vue初始化、配置插件等</div><div class="line">├── static                     // 第三方不打包资源</div><div class="line">├── .babelrc                   // babel-loader 配置</div><div class="line">├── .eslintrc.js               // eslint 配置项</div><div class="line">├── .stylelintrc.js            // stylelint 配置项</div><div class="line">├── .gitignore                 // git 忽略项</div><div class="line">├── index.html                 // html模板</div><div class="line">└── package.json               // package.json</div></pre></td></tr></table></figure>
+<p>SDMK-ADMIN 使用 vue-cli 进行项目初始化，然后根据实际需求进行了一些调整，上图是 SDMK-ADMIN 的目录结构。首先介绍一下src目录重里面的内容。</p>
+<h3 id="views和components"><a href="#views和components" class="headerlink" title="views和components"></a>views和components</h3><p>从上面的网站侧边栏导航可以看到，我们的后台在设计页面的时候，是按照不同的功能管理模块来组织页面的。因此，views 目录中的每一条子目录对应着页面上的一个管理模块。components 是存放页面组件的目录，为了方便维护，除了 common 目录存放公用组件外，页面级别的组件也是按照和 views 中的子目录一一对应的方式组织的。</p>
+<p><img src="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171023-105957.jpg" alt="Jietu20171023-105957"></p>
+<p>css 的组织方式，我们采用的是就近原则。即组件自己独有的 css 文件直接放在该组件的目录下，这样在后续的开发中，能很方便的定位到相关的 css 文件。另外在 assets 目录里有一个单独的 common.css 文件。这个文件包含的内容大多是全局的样式，比如整体布局样式、页面通用样式等。common.css文件从app.vue中全局引入。</p>
+<h3 id="models"><a href="#models" class="headerlink" title="models"></a>models</h3><p>models 目录中放的是和 api 接口相关的内容，通俗来讲就是存放各个页面的各个 http 请求的链接、参数等配置。从下图可以看到，每个js文件基本上也是按照页面模块来进行命名的，这么做的目的同样也是为了方面维护。</p>
+<p><img src="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171019-112608.jpg" alt="Jietu20171019-112608"></p>
+<p>关于接口的调用方式，项目采用的是团队里设计的声明式的 model 层 apischema [ <a href="https://www.npmjs.com/package/apischema" target="_blank" rel="external">https://www.npmjs.com/package/apischema</a> ]。</p>
+<p>具体用法，比如在 account.js 中，一个获取用户信息的接口可以写成：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// models/account.js</span></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> getUserInfo = schema.get(<span class="string">'/path/to/backendApi'</span>, &#123;</div><div class="line">  <span class="attr">userName</span>: &#123; <span class="attr">type</span>:<span class="built_in">String</span>, <span class="attr">required</span>: <span class="literal">true</span> &#125;,</div><div class="line">  <span class="attr">userId</span>: &#123; <span class="attr">type</span>:<span class="built_in">String</span>, <span class="attr">required</span>: <span class="literal">true</span> &#125;,</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>相应的在 account.vue 中，调用该接口的方式可以这么写：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// account/account.vue</span></div><div class="line"><span class="keyword">import</span> &#123;getUserInfo&#125; <span class="keyword">from</span> <span class="string">'models/account.js'</span></div><div class="line"></div><div class="line">getUserInfo(&#123; <span class="attr">userName</span>: <span class="string">'xxx'</span>, <span class="attr">userId</span>: <span class="string">'xxx'</span>&#125;).then(<span class="function">(<span class="params">json</span>) =&gt;</span> &#123;</div><div class="line"> <span class="built_in">console</span>.log(json);  </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>使用了这个工具，从每一个 api 的定义中，能够直观的看出接口协议、地址和参数规则等内容。可以说每一个 model 的文件，就是一系列简化的接口的文档，一目了然。</p>
+<p>关于发起 http 请求的功能，实际上用的是 axios。只不过我们在 index.js 中对 axios 进行了多一步的处理来使用 apischema。代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// models/index.js</span></div><div class="line"><span class="keyword">import</span> apischema <span class="keyword">from</span> <span class="string">'apischema'</span>;</div><div class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> baseURL = <span class="string">'127.0.0.1'</span>;</div><div class="line"><span class="keyword">const</span> http = axios.create(&#123; baseURL &#125;);</div><div class="line"><span class="keyword">const</span> schema = apischema(&#123; http &#125;);</div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> schema;</div></pre></td></tr></table></figure>
+<p>另外，在 index.js 中还对 axios 进行了封装，来进行登录权限的控制。这个留到后面再详细说明。</p>
+<h3 id="router"><a href="#router" class="headerlink" title="router"></a>router</h3><p>路由控制是用的 vue-router，比较常规的配置就不详细说明了。只说一个需要要注意的地方。</p>
+<p><img src="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171019-115932.jpg" alt="Jietu20171019-115932"></p>
+<p>如上图所示，这两个路由用的是用同一个 component。当<br>在这两个路由之间切换时，是<strong>不会</strong>触发 Vue 的 mounted 钩子的，也不会触发 transition 动画效果。vue 1.x 版本可以用路由钩子 canReuse 来取消组件的复用，但是vue 2.x 版本已经取消了这个钩子。要解决这个问题，除了通过 watch $route 的变化来做处理。还可以通过计算属性, 生成一个 key, 这个 key 必须保证每一个 url 都不一样，然后给 router-view 绑定即可。我们是用时间戳生成的 key ：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;router-view :key=<span class="string">"key"</span>&gt;&lt;/router-view&gt;</div><div class="line"></div><div class="line">computed: &#123;</div><div class="line">    key() &#123;</div><div class="line">        return this.$route.name + new Date().getTime();</div><div class="line">    &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>这种方法比较粗暴, 会作用到所有的页面, 如果只是想让部分页面起作用, 那么就不要将 key 直接绑在需要组件的根元素上就可以了。</p>
+<h3 id="assets"><a href="#assets" class="headerlink" title="assets"></a>assets</h3><p>assets 目录就是放一些 favicon 图标、图片、样式、自己用的一些js文件等。在这里特别提示一下 favicon 图标的处理方法。</p>
+<p>在 webpack 插件中，通常会使用一个叫 HtmlWebpackPlugin 的插件。它的作用是在打包的时候，自动生成一个 html 文件，并且引用相关的assets文件 - 比如css, js。</p>
+<p>为了引用 favicon，只需要在 webpack.config 配置文件里，配置该插件的代码中加上下面的代码，参数路径是你存放 favicon.ico 的地址，那么在最后打包出来的 dist 目录下，index.html 就顺利能引用 favicon 了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> HtmlWebpackPlugin(&#123;</div><div class="line">  <span class="comment">// 引入favicon</span></div><div class="line">  favicon: path.resolve(__dirname, <span class="string">'/path/to/favicon.ico'</span>),</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h2 id="登录以及权限控制"><a href="#登录以及权限控制" class="headerlink" title="登录以及权限控制"></a>登录以及权限控制</h2><h3 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h3><p><img src="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171019-140936.jpg" alt="Jietu20171019-140936"></p>
+<p>用户在输入用户名和密码之后点击登陆，如果登录成功，服务端会返回一个该用户token，它也可以理解成是唯一标示用户身份的令牌。后端和我们约定好一个规则：用户登录之后的每一个 http 的请求都需要在请求头中带上这个 token，不带 token 或者 token 过期，接口都会返回401状态码。前端在用户登录之后会把 token 存储在本地的 cookie 里，以便后续的操作获取 token 的值。</p>
+<p>对登录的判断逻辑分为两个层面。第一个是路由层面，在 main.js 文件中，使用vue-router 的 router.beforeEach 方法，在进入每个页面之前检查一下 cookie 中是否有 token，如果没有，则跳转到登录页面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">router.beforeEach(<span class="function">(<span class="params">&#123; to, next &#125;</span>) =&gt;</span> &#123;</div><div class="line">  <span class="keyword">if</span> (!Cookies.get(<span class="string">'admintdppt'</span>)) &#123;</div><div class="line">    next(&#123;</div><div class="line">      <span class="attr">path</span>: <span class="string">'/login'</span>,</div><div class="line">    &#125;);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    next();</div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>第二个层面是 http 请求层面的判断，发送请求时，请求头带上 token，同时如果状态码返回了401，我们需要让用户跳转到登录页面。项目在最初的时候是在每个页面都会获取一次 cookie，然后每一个请求都会把 header 参数手工加到请求中。根据返回的状态码进行进一步的操作，就像下面代码一样。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// account.vue</span></div><div class="line"><span class="keyword">import</span> &#123;getUserInfo, getAdminInfo&#125; <span class="keyword">from</span> <span class="string">'models/account.js'</span>;</div><div class="line"><span class="keyword">import</span> Cookies <span class="keyword">from</span> <span class="string">'js-cookie'</span>;</div><div class="line"></div><div class="line"><span class="keyword">this</span>.token = Cookies.get(<span class="string">'token'</span>);</div><div class="line"></div><div class="line">getUserInfo(&#123;</div><div class="line">  <span class="attr">userName</span>: <span class="string">'xxx'</span>, </div><div class="line">  <span class="attr">userId</span>: <span class="string">'xxx'</span></div><div class="line">&#125;, &#123; </div><div class="line">  <span class="attr">headers</span>: &#123; token = <span class="keyword">this</span>.token &#125; <span class="comment">// 手动添加</span></div><div class="line">&#125;).then(<span class="function">(<span class="params">json</span>) =&gt;</span> &#123;</div><div class="line">  <span class="keyword">if</span> (json.status === <span class="number">401</span>) &#123;</div><div class="line">    <span class="keyword">this</span>.$router.push(<span class="string">'/login'</span>);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="comment">// do something</span></div><div class="line">  &#125; </div><div class="line">&#125;);</div><div class="line">getAdminInfo(&#123;</div><div class="line">  <span class="attr">userName</span>: <span class="string">'xxx'</span>, </div><div class="line">  <span class="attr">userId</span>: <span class="string">'xxx'</span></div><div class="line">&#125;, &#123; </div><div class="line">  <span class="attr">headers</span>: &#123; token = <span class="keyword">this</span>.token &#125; <span class="comment">// 还是手动添加</span></div><div class="line">&#125;).then(<span class="function">(<span class="params">json</span>) =&gt;</span> &#123;</div><div class="line">   <span class="keyword">if</span> (json.status === <span class="number">401</span>) &#123;</div><div class="line">    <span class="keyword">this</span>.$router.push(<span class="string">'/login'</span>);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="comment">// do something</span></div><div class="line">  &#125;   </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>随着项目越来越大，每次这样手动添加的动作非常繁琐。有没有一种方法可以用全局的方式给 request header 添加参数呢？让我们回到 models 目录中的 index.js 文件。对 axios 做一下处理，添加一个请求拦截器：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// models/index.js</span></div><div class="line"><span class="keyword">import</span> apischema <span class="keyword">from</span> <span class="string">'apischema'</span>;</div><div class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span>;</div><div class="line"><span class="keyword">import</span> router <span class="keyword">from</span> <span class="string">'../router'</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> baseURL = <span class="string">'127.0.0.1'</span>;</div><div class="line"><span class="keyword">const</span> http = axios.create(&#123; baseURL &#125;);</div><div class="line"><span class="comment">// 添加请求拦截器</span></div><div class="line">http.interceptors.request.use(<span class="function">(<span class="params">config</span>) =&gt;</span> &#123;</div><div class="line">  <span class="keyword">const</span> request = config;</div><div class="line">  <span class="keyword">const</span> token = Cookies.get(<span class="string">'token'</span>);</div><div class="line">  <span class="keyword">if</span> (token) &#123;</div><div class="line">    <span class="comment">// 让每个请求头携带token</span></div><div class="line">    request.headers.token = token;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> request;</div><div class="line">&#125;, error =&gt; <span class="built_in">Promise</span>.reject(error));</div><div class="line"></div><div class="line"><span class="comment">// 添加响应拦截器</span></div><div class="line">http.interceptors.response.use(<span class="function">(<span class="params">response</span>) =&gt;</span> &#123;</div><div class="line">  <span class="keyword">if</span> (response.data.status === <span class="number">401</span>) &#123; <span class="comment">// 接口401登录拦截</span></div><div class="line">    router.push(&#123; <span class="attr">path</span>: <span class="string">'/login'</span> &#125;); <span class="comment">// 返回登录页面</span></div><div class="line">    Message.error(<span class="string">'登录信息过期，请重新登录！'</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> response.data;</div><div class="line">&#125;, error =&gt; <span class="built_in">Promise</span>.reject(error);</div><div class="line">&#125;);</div><div class="line"><span class="keyword">const</span> schema = apischema(&#123; http &#125;);</div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> schema;</div></pre></td></tr></table></figure>
+<p>这样就不用每个请求都手动来添加 token，或者来做异常处理，一劳永逸。</p>
+<h3 id="权限控制"><a href="#权限控制" class="headerlink" title="权限控制"></a>权限控制</h3><p>后台登录的每个角色都是有一定的权限的，普通用户就不能使用管理员才允许使用的功能。每个 http 请求，后端会根据请求头中的 token 来判定该用户的权限，如果用户没有权限，则返回403状态码。前端根据不同的状态码，来弹出不同的提示框。我们通过在响应拦截器中添加判断来达到这个功能：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 还是models/index.js</span></div><div class="line"><span class="comment">// 响应拦截器</span></div><div class="line">http.interceptors.response.use(<span class="function">(<span class="params">response</span>) =&gt;</span> &#123;</div><div class="line">  <span class="keyword">if</span> (response.data.status === <span class="number">401</span>) &#123; <span class="comment">// 接口401登录拦截</span></div><div class="line">      Message.error(<span class="string">'登录信息过期，请重新登录！'</span>);</div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (response.data.status === <span class="number">403</span>) &#123;</div><div class="line">      Message.error(<span class="string">'您没有此项操作的权限！'</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> response.data;</div><div class="line">&#125;, error =&gt; <span class="built_in">Promise</span>.reject(error);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>其实，仅仅使用这种方式来进行权限控制并不是一个完整的方案。可以想像，登录之后，所有页面对所有用户均是可见的，无论有没有某一个页面的权限，都能看到这个页面。只不过当点击进入这个没有权限的页面时，用户无法做任何操作，置会看到一些没有数据的布局，然后页面上方会有弹窗提示“您没有此项操作的权限”，用户体验不是很好。理想的权限控制状态，是对页面进行权限控制，有某种角色的用户只能看到特定的页面。</p>
+<p>要达到理想状态的页面控制，我们做了一些调研，尝试了一些方法，有一个具体的思路，就是在前端自己的路由控制文件中，把每个路由标识出可访问的权限。当用户登录之后，通过 token 获取用户的角色，动态根据角色分配不同路由，再通过 router.addRoutes 动态挂载路由。router.addRoutes 是 vue-router2.2.0 添加的方法，可以动态的添加新的路由到原有的路由表中。不过项目还没有进行代码层面的实现，在之后的优化安排中应该会落实下来。</p>
+<h2 id="多环境"><a href="#多环境" class="headerlink" title="多环境"></a>多环境</h2><p>项目使用 vue-cli 创建后，会生成 dev 和 production 两种环境。但是在实际开发中我们还额外需要另外两种环境，一个是 daily 即每日构建环境，另一个是 buildtest 即集成测试环境。每个环境会对应不同的接口地址。</p>
+<p>修改多环境的配置，首先在 package.json 中，修改 script 字段中的值，设置不同环境变量：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// package.json</span></div><div class="line">script: &#123;</div><div class="line">  <span class="string">"build"</span>: <span class="string">"NODE_ENV=production node build/build.js"</span>,</div><div class="line">  <span class="string">"builddaily"</span>: <span class="string">"NODE_ENV=daily node build/build.js"</span>,</div><div class="line">  <span class="string">"buildtest"</span>: <span class="string">"NODE_ENV=buildtest node build/build.js"</span>,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样，要打包 daily 环境的时候，只需要运行 npm run builddaily 命令就可以了。同时在项目的 build 目录下的 build.js 文件中，注释掉文件中的第二行，如下图所示。因为这一行会把环境变量始终置为 production，而我们在 package.json 中已经设置了环境变量，所以这一行就不需要了。</p>
+<p><img src="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171020-111157.jpg" alt="Jietu20171020-111157"></p>
+<p>之后在需要根据环境改变的代码中，就可以自由的写逻辑了。比如在 models/index.js 中我们根据环境不同，设置不同接口地址：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// models/index.js</span></div><div class="line"><span class="keyword">import</span> apischema <span class="keyword">from</span> <span class="string">'apischema'</span>;</div><div class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span>;</div><div class="line"></div><div class="line"><span class="keyword">let</span> baseURL;</div><div class="line"><span class="keyword">switch</span> (process.env.NODE_ENV) &#123;</div><div class="line">  <span class="keyword">case</span> <span class="string">'production'</span>:</div><div class="line">    baseURL = <span class="string">'http://www.production.com/url/website'</span>;</div><div class="line">    <span class="keyword">break</span>;</div><div class="line">  <span class="keyword">case</span> <span class="string">'daily'</span>:</div><div class="line">    baseURL = <span class="string">'http://www.daily.com/url/website'</span>;</div><div class="line">    <span class="keyword">break</span>;</div><div class="line">  <span class="keyword">case</span> <span class="string">'buildtest'</span>:</div><div class="line">    baseURL = <span class="string">'http://www.buildtest.com/url/website'</span>;</div><div class="line">    <span class="keyword">break</span>;</div><div class="line">  <span class="keyword">default</span>:</div><div class="line">    baseURL = <span class="string">'http://www.default.com/url/website'</span>;</div><div class="line">    <span class="keyword">break</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">const</span> http = axios.create(&#123; baseURL &#125;);</div><div class="line"><span class="keyword">const</span> schema = apischema(&#123; http &#125;);</div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> schema;</div></pre></td></tr></table></figure>
+<h2 id="UI库"><a href="#UI库" class="headerlink" title="UI库"></a>UI库</h2><p>项目的UI库使用的是公司同事梁灏开源的iView，大大的节约了页面样式组件开发的时间。目前iView在 GitHub 上star已经超过10000，有兴趣的同学可以去 <a href="https://www.iviewui.com" target="_blank" rel="external">https://www.iviewui.com</a> 做进一步的了解。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>这篇分享主要是对SDMK-ADMIN项目从结构和工程的层面进行了一些梳理，另外在页面实战的层面也趟了蛮多的坑，比如不同页面组件之间的通信，状态管理，多图表页面的组织方式等等。但是受限于篇幅的原因，以后有机会的话再详细介绍。</p>
+<p>现在项目的样子远远不是最终的样子，我们只是希望它是一个好的地基，能很好的支撑之后的扩展。因为随着时间的推进，项目也需要持续性的满足增加的业务和需求。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/18/管理服务编织页面的状态/" rel="next" title="使用 vuex 管理服务编织页面的状态">
+                <i class="fa fa-chevron-left"></i> 使用 vuex 管理服务编织页面的状态
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="ZhangChengbin" />
+          <p class="site-author-name" itemprop="name">ZhangChengbin</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目录结构"><span class="nav-number">1.</span> <span class="nav-text">目录结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#views和components"><span class="nav-number">1.1.</span> <span class="nav-text">views和components</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#models"><span class="nav-number">1.2.</span> <span class="nav-text">models</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#router"><span class="nav-number">1.3.</span> <span class="nav-text">router</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#assets"><span class="nav-number">1.4.</span> <span class="nav-text">assets</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#登录以及权限控制"><span class="nav-number">2.</span> <span class="nav-text">登录以及权限控制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#登录"><span class="nav-number">2.1.</span> <span class="nav-text">登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#权限控制"><span class="nav-number">2.2.</span> <span class="nav-text">权限控制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多环境"><span class="nav-number">3.</span> <span class="nav-text">多环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UI库"><span class="nav-number">4.</span> <span class="nav-text">UI库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">5.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZhangChengbin</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
