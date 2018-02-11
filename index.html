@@ -253,6 +253,140 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://btfrankenstein.github.io/2018/02/11/Vue响应式原理之 Watcher 和 Dep/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ZhangChengbin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BtFrankenstein">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/11/Vue响应式原理之 Watcher 和 Dep/" itemprop="url">Vue 响应式原理之 Watcher 和 Dep</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-11T15:21:26+08:00">
+                2018-02-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>之前在学习 Vue 官方文档<a href="https://cn.vuejs.org/v2/guide/reactivity.html" target="_blank" rel="external">深入响应式原理</a>时，大概对响应式有一个概念性的了解以及它的效果是什么样子的。最近通过阅读 Vue 的源码并查询相关资料，对响应式原理有了更进一步的认识，并且大体上可以还原出它的实现过程。最近几篇文章会记录一下自己的理解过程。</p>
+<p>响应式原理我理解可以分为两步，第一步是<code>依赖收集</code>的过程，第二步是<code>触发-重新渲染</code>的过程。先来看<code>依赖收集</code>的过程，有三个很重要的类，分别是 Watcher、Dep、Observer。Watcher 是观察者模式中的观察者；我把 Dep 看成是观察者模式中的主题，它也是管理和保存观察者的地方；Observer 用来使用 Object.defineProperty 把指定属性转为 getter/setter，它是观察者模式中充当发布者的角色。对于观察者模式不熟悉的话可以查看上篇文章。</p>
+<p>接下来，从最基本的实例化 Vue 开始讲起，本篇文章会以下面这段代码作为实际例子，来剖析依赖收集的过程。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</div><div class="line">  <span class="attr">el</span>: <span class="string">'#demo'</span>,</div><div class="line">  <span class="attr">data</span>: &#123;</div><div class="line">    <span class="attr">firstName</span>: <span class="string">'Hello'</span>,</div><div class="line">    <span class="attr">fullName</span>: <span class="string">''</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">watch</span>: &#123;</div><div class="line">    firstName(val) &#123;</div><div class="line">      <span class="keyword">this</span>.fullName = val + <span class="string">'TalkingData'</span>;</div><div class="line">    &#125;,</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>在源码中，通过还原Vue 进行实例化的过程，我把相关代码做了梳理。从实例化开始一步一步到实例化了 Watcher 类的源码依次为（我省略了很多不在本篇文章讨论的代码）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// src/core/instance/index.js</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Vue</span> (<span class="params">options</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span> &amp;&amp;</div><div class="line">    !(<span class="keyword">this</span> <span class="keyword">instanceof</span> Vue)</div><div class="line">  ) &#123;</div><div class="line">    warn(<span class="string">'Vue is a constructor and should be called with the `new` keyword'</span>)</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">this</span>._init(options)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// src/core/instance/init.js</span></div><div class="line">Vue.prototype._init = <span class="function"><span class="keyword">function</span> (<span class="params">options?: Object</span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> vm: Component = <span class="keyword">this</span></div><div class="line">  <span class="comment">// ...</span></div><div class="line">  initState(vm)</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// src/core/instance/state.js</span></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">initState</span> (<span class="params">vm: Component</span>) </span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="keyword">const</span> opts = vm.$options</div><div class="line">  <span class="keyword">if</span> (opts.data) &#123;</div><div class="line">    initData(vm)</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="keyword">if</span> (opts.watch &amp;&amp; opts.watch !== nativeWatch) &#123;</div><div class="line">    initWatch(vm, opts.watch)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">initWatch</span> (<span class="params">vm: Component, watch: Object</span>) </span>&#123;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> watch) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    createWatcher(vm, key, handler)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createWatcher</span> (<span class="params"></span></span></div><div class="line">  vm: Component,</div><div class="line">  keyOrFn: string | Function,</div><div class="line">  handler: any,</div><div class="line">  options?: Object</div><div class="line">) &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="keyword">return</span> vm.$watch(keyOrFn, handler, options)</div><div class="line">&#125;</div><div class="line">Vue.prototype.$watch = <span class="function"><span class="keyword">function</span> (<span class="params"></span></span></div><div class="line">  expOrFn: string | Function,</div><div class="line">  cb: any,</div><div class="line">  options?: Object</div><div class="line">): <span class="title">Function</span> &#123;</div><div class="line">  <span class="keyword">const</span> vm: Component = <span class="keyword">this</span></div><div class="line">  <span class="comment">// ...</span></div><div class="line"></div><div class="line">  <span class="comment">// 注意：在这里实例化了 Watcher</span></div><div class="line">  <span class="keyword">const</span> watcher = <span class="keyword">new</span> Watcher(vm, expOrFn, cb, options)</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面我们来看 Watcher 类究竟起了什么作用</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// src/core/observer/watcher.js</span></div><div class="line"><span class="keyword">import</span> Dep, &#123; pushTarget, popTarget &#125; <span class="keyword">from</span> <span class="string">'./dep'</span></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">Watcher</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span> (</div><div class="line">    vm: Component,</div><div class="line">    expOrFn: string | Function,</div><div class="line">    cb: Function,</div><div class="line">    options?: ?Object,</div><div class="line">    isRenderWatcher?: boolean</div><div class="line">  ) &#123;</div><div class="line">    <span class="keyword">this</span>.vm = vm</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> expOrFn === <span class="string">'function'</span>) &#123;</div><div class="line">      <span class="keyword">this</span>.getter = expOrFn</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">this</span>.getter = parsePath(expOrFn)</div><div class="line">      <span class="comment">// ...</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">this</span>.value = <span class="keyword">this</span>.lazy</div><div class="line">      ? <span class="literal">undefined</span></div><div class="line">      : <span class="keyword">this</span>.get()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意这里 this.getter 的赋值，实际上是把 new Vue() 时， watch 字段里键值对（key/value）的键（key）- 也就是这里的参数 expOrFn - 赋值给了 this.getter。watch 字段里键值对（key/value）的键（key）可以是字符串，也可以是函数。如果 expOrFn 是函数，那么直接让 this.getter 等于该函数。如果是我们之前示例里的代码，那么 expOrFn = ‘firstName’，它是字符串，因此会调用 parsePath 方法。</p>
+<p>下面的代码块是 parsePath 方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> bailRE = <span class="regexp">/[^\w.$]/</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">parsePath</span> (<span class="params">path</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (bailRE.test(path)) &#123;</div><div class="line">    <span class="keyword">return</span></div><div class="line">  &#125;</div><div class="line">  <span class="keyword">var</span> segments = path.split(<span class="string">'.'</span>);</div><div class="line">  <span class="comment">// 返回一个匿名函数</span></div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; segments.length; i++) &#123;</div><div class="line">      <span class="keyword">if</span> (!obj) &#123; <span class="keyword">return</span> &#125;</div><div class="line">      obj = obj[segments[i]];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> obj</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>该方法返回一个匿名函数，接受一个对象作为参数。在 Watcher 类中的 get() 方法执行 <code>this.getter.call(vm, vm)</code> 时，会调用这个返回的匿名函数。在匿名函数中，segments[i] 是 watch 字段里键值对（key/value）的键（key），如果 segments[i] 被 Object.defineProperty 设置了 get 方法的话，那么执行到 obj[segments[i]] 时，会触发 segments[i] 属性的 get 方法。在我们的示例里，就相当于执行了 vm[firstName]，所以会触发 firstName 上的 get 方法（如果设置了的话）。</p>
+<p>在 Watcher 的 constructor 中，除了调用了 parsePath(expOrFn)，<code>this.value = this.lazy ? undefined : this.get()</code> 还调用了 this.get() 方法。下面我们来看一下 Watcher 类里面 get 方法的代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// src/core/observer/watcher.js</span></div><div class="line"></div><div class="line"><span class="comment">//...</span></div><div class="line">get() &#123;</div><div class="line">  pushTarget(<span class="keyword">this</span>)</div><div class="line"></div><div class="line">  <span class="keyword">let</span> value</div><div class="line">  <span class="keyword">const</span> vm = <span class="keyword">this</span>.vm</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    value = <span class="keyword">this</span>.getter.call(vm, vm)</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="keyword">return</span> value</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// addDep方法，会在 Dep 类的 depend 方法中调用</span></div><div class="line">addDep (dep: Dep) &#123;</div><div class="line">  <span class="keyword">const</span> id = dep.id</div><div class="line">  <span class="keyword">if</span> (!<span class="keyword">this</span>.newDepIds.has(id)) &#123;</div><div class="line">    <span class="keyword">this</span>.newDepIds.add(id)</div><div class="line">    <span class="keyword">this</span>.newDeps.push(dep)</div><div class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.depIds.has(id)) &#123;</div><div class="line">      <span class="comment">// Dep 类中的 addSub 方法</span></div><div class="line">      dep.addSub(<span class="keyword">this</span>)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>pushTarget 是 Dep 类中的方法，它的作用是给 Dep.target 赋值，所以 pushTarget 执行了之后 <code>Dep.target = 当前这个 watcher 实例</code>，在执行到 <code>value = this.getter.call(vm, vm)</code> 时，会调用之前 parsePath 里面返回的匿名函数，这时就会调用 Observer 类通过 Object.defineProperty 给 key 设置的 get 方法，而这个 get 函数执行过程中，因为 Dep.target 已经存在，那么就会进入依赖收集的过程。Observer 类相关及其 get/set 方法的内容会在之后的文章里介绍，这里只需要知道，依赖收集的过程的开始，是执行了下面的代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 实例化 Dep</span></div><div class="line"><span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</div><div class="line"><span class="comment">// 调用 Dep 的 depend 方法</span></div><div class="line">dep.depend();</div></pre></td></tr></table></figure>
+<p>这段代码实际上是在 Observer 类的一个方法中 Object.defineProperty 时的 get 方法中的，这个也是非常重要的内容，我会在之后的文章里介绍。</p>
+<p>接下来我们来看 Dep 类的代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// src/core/observer/dep.js</span></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</div><div class="line">  <span class="keyword">static</span> target: ?Watcher;</div><div class="line">  id: number;</div><div class="line">  subs: <span class="built_in">Array</span>&lt;Watcher&gt;;</div><div class="line"></div><div class="line">  <span class="keyword">constructor</span> () &#123;</div><div class="line">    <span class="keyword">this</span>.id = uid++</div><div class="line">    <span class="keyword">this</span>.subs = []</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  addSub (sub: Watcher) &#123;</div><div class="line">    <span class="keyword">this</span>.subs.push(sub)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  removeSub (sub: Watcher) &#123;</div><div class="line">    remove(<span class="keyword">this</span>.subs, sub)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  depend () &#123;</div><div class="line">    <span class="keyword">if</span> (Dep.target) &#123;</div><div class="line">      Dep.target.addDep(<span class="keyword">this</span>)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  notify () &#123;</div><div class="line">    <span class="comment">// stabilize the subscriber list first</span></div><div class="line">    <span class="keyword">const</span> subs = <span class="keyword">this</span>.subs.slice()</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>, l = subs.length; i &lt; l; i++) &#123;</div><div class="line">      subs[i].update()</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>之前已经介绍过，Dep.target 是 Watcher 类的实例，执行 Wachter 类的 this.get() 时，就会给 Dep.target 赋值。所以开始依赖收集而执行 <code>dep.depend();</code>时，在这里的 depend 方法就会进而执行 <code>Dep.target.addDep(this)</code>。addDep 是之前介绍过的 Watcher 类中的方法，addDep 会反过来调用 Dep 类的 addSub 方法，向 Dep 管理的 this.subs 观察者列表里 push 进当前 Watcher 实例。当列表中添加了该属性 - 比如示例里的 firstName - 的 Watcher 实例之后，依赖收集的过程在这里就结束了。也就是下面这张图中 <code>render - touch - Data[getter] - Collect as Dependency - Watcher</code> 的这个过程结束了。</p>
+<p><img src="https://cn.vuejs.org/images/data.png" alt="Reactivity "></p>
+<p>那图中的 <code>Data[setter] - Notify - Watcher - Trigger re-render</code> 的过程是体现再在哪里呢？根据上篇文章介绍的观察者模式，每次被 watch 的属性即被当作依赖收集起来的属性 - 比如示例里的 firstName - 发生变化时，会触发 Observer 类中的 Object.defineProperty 给该属性设置的 set 方法。set 方法里有回调用 <code>dep.notify</code>。 该方法会遍历观察者列表中的每一个 Watcher 实例即每一个观察者，然后触发每一个观察者的 update 方法进行更新，最终能更新 Virtual DOM TREE。</p>
+<p>介绍完了 Watcher 和 Dep 类，接下来的文章该介绍 Observer 类了。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://btfrankenstein.github.io/2018/02/08/观察者（发布订阅）模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1173,8 +1307,8 @@
       
         
           <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>在项目中遇到一项需求。在父组件中异步请求一项数据，并且把这项数据传递到子组件中。组件中使用该数据作为 <code>&lt;input&gt;</code> 的 <code>value</code>，并且要求是响应式的。可以把代码简化成下面这个样子：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- 父组件 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span> <span class="attr">lang</span>=<span class="string">"html"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">input-drop</span> <span class="attr">:val</span>=<span class="string">"serviceName"</span>&gt;</span><span class="tag">&lt;/<span class="name">input-drop</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></div><div class="line">  import InputDrop from '../components/inputdropdown';</div><div class="line">  export default &#123;</div><div class="line">    data() &#123;</div><div class="line">      return &#123;</div><div class="line">        serviceName: '',</div><div class="line">      &#125;;</div><div class="line">    &#125;,</div><div class="line">    components: &#123;</div><div class="line">      InputDrop,</div><div class="line">    &#125;,</div><div class="line">    mounted() &#123;</div><div class="line">      setTimeout(() =&gt; &#123;</div><div class="line">        this.serviceName = 'vueService';</div><div class="line">      &#125;, 1000)</div><div class="line">    &#125;,</div><div class="line">  &#125;;</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- 子组件 inputdrop.vue --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span> <span class="attr">lang</span>=<span class="string">"html"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>&#123;&#123; val &#125;&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">v-model</span>=<span class="string">"val"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></div><div class="line">  export default &#123;</div><div class="line">    props: ['val'],</div><div class="line">  &#125;;</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- 父组件 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span> <span class="attr">lang</span>=<span class="string">"html"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">input-drop</span> <span class="attr">:val</span>=<span class="string">"serviceName"</span>&gt;</span><span class="tag">&lt;/<span class="name">input-drop</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">  <span class="keyword">import</span> InputDrop <span class="keyword">from</span> <span class="string">'../components/inputdropdown'</span>;</div><div class="line">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</div><div class="line">    data() &#123;</div><div class="line">      <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">serviceName</span>: <span class="string">''</span>,</div><div class="line">      &#125;;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">components</span>: &#123;</div><div class="line">      InputDrop,</div><div class="line">    &#125;,</div><div class="line">    mounted() &#123;</div><div class="line">      setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">        <span class="keyword">this</span>.serviceName = <span class="string">'vueService'</span>;</div><div class="line">      &#125;, <span class="number">1000</span>)</div><div class="line">    &#125;,</div><div class="line">  &#125;;</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- 子组件 inputdrop.vue --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span> <span class="attr">lang</span>=<span class="string">"html"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>&#123;&#123; val &#125;&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">v-model</span>=<span class="string">"val"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</div><div class="line">    <span class="attr">props</span>: [<span class="string">'val'</span>],</div><div class="line">  &#125;;</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/07/19/Vue子组件中的props作为-input-元素的value值时遇到的问题/#more" rel="contents">
@@ -1377,7 +1511,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
