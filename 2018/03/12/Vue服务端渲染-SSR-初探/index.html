@@ -99,7 +99,7 @@
 <meta property="og:url" content="http://btfrankenstein.github.io/2018/03/12/Vue服务端渲染-SSR-初探/index.html">
 <meta property="og:site_name" content="BtFrankenstein">
 <meta property="og:description" content="SSR？SSR - 是Server-Side Rendering（服务端渲染）的缩写。通常情况下，我们使用 Vue.js 构建单页面应用的。在这种方式下，页面最开始只有一个 &amp;lt;div id=&amp;quot;app&amp;quot;&amp;gt;&amp;lt;/div&amp;gt; 元素，该元素内部的所有其他的 DOM 和数据都是通过 js 渲染加载出来的。SSR 则不同，每个页面或者组件会被渲染为服务器端的 HTML">
-<meta property="og:updated_time" content="2018-03-12T07:27:35.217Z">
+<meta property="og:updated_time" content="2018-03-12T07:41:35.245Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Vue服务端渲染(SSR)初探">
 <meta name="twitter:description" content="SSR？SSR - 是Server-Side Rendering（服务端渲染）的缩写。通常情况下，我们使用 Vue.js 构建单页面应用的。在这种方式下，页面最开始只有一个 &amp;lt;div id=&amp;quot;app&amp;quot;&amp;gt;&amp;lt;/div&amp;gt; 元素，该元素内部的所有其他的 DOM 和数据都是通过 js 渲染加载出来的。SSR 则不同，每个页面或者组件会被渲染为服务器端的 HTML">
@@ -320,6 +320,7 @@
 
       
         <h1 id="SSR？"><a href="#SSR？" class="headerlink" title="SSR？"></a>SSR？</h1><p>SSR - 是Server-Side Rendering（服务端渲染）的缩写。通常情况下，我们使用 Vue.js 构建单页面应用的。在这种方式下，页面最开始只有一个 <code>&lt;div id=&quot;app&quot;&gt;&lt;/div&gt;</code> 元素，该元素内部的所有其他的 DOM 和数据都是通过 js 渲染加载出来的。SSR 则不同，每个页面或者组件会被渲染为服务器端的 HTML 字符串，然后被直接发送到浏览器。</p>
+<a id="more"></a>
 <h1 id="优劣"><a href="#优劣" class="headerlink" title="优劣"></a>优劣</h1><p>优势</p>
 <ul>
 <li><p>SEO<br>因为 SSR 是把 DOM 和数据渲染为 HTML 字符串然后发给浏览器，爬虫可以抓取到所有内容。而客户端渲染时，某些数据通过异步加载进页面，那么爬虫并不会等待异步完成后再行抓取页面内容。</p>
