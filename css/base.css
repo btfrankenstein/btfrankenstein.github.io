@@ -13,7 +13,7 @@
 .serif,
 body,
 .intro-header .post-heading .meta {
-  font-family: 'Lora', 'Times New Roman', serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", STHeiti, "Microsoft YaHei", "Microsoft JhengHei", "Source Han Sans SC", "Noto Sans CJK SC", "Source Han Sans CN", "Noto Sans SC", "Source Han Sans TC", "Noto Sans CJK TC", "WenQuanYi Micro Hei", SimSun, serif;
 }
 .sans-serif,
 h1,
@@ -29,11 +29,12 @@ h6,
 .btn,
 .pager li > a,
 .pager li > span {
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", STHeiti, "Microsoft YaHei", "Microsoft JhengHei", "Source Han Sans SC", "Noto Sans CJK SC", "Source Han Sans CN", "Noto Sans SC", "Source Han Sans TC", "Noto Sans CJK TC", "WenQuanYi Micro Hei", SimSun, sans-serif;
 }
 body {
-  font-size: 20px;
+  font-size: 16px;
   color: #404040;
+  line-height: 1.7;
 }
 p {
   line-height: 1.5;
@@ -239,9 +240,10 @@ hr.small {
   color: #0085a1;
 }
 .post-preview > a > .post-title {
-  font-size: 30px;
+  font-size: 26px;
   margin-top: 30px;
   margin-bottom: 10px;
+  font-weight: 700;
 }
 .post-preview > a > .post-title.archive {
   font-size: 22px;
@@ -250,12 +252,13 @@ hr.small {
   margin: 0;
   font-weight: 300;
   margin-bottom: 10px;
+  font-size: 16px;
 }
 .post-preview > .post-meta {
-  color: #808080;
-  font-size: 18px;
+  color: #ccc;
+  font-size: 14px;
   font-style: italic;
-  margin-top: 0;
+  margin-top: 10px;
 }
 .post-preview > .post-meta.archive {
   font-size: 16px;
@@ -271,8 +274,12 @@ hr.small {
 }
 @media only screen and (min-width: 768px) {
   .post-preview > a > .post-title {
-    font-size: 36px;
+    font-size: 26px;
   }
+}
+.post-content-preview {
+  font-size: 14px;
+  color: #a3a3a3;
 }
 .section-heading {
   font-size: 36px;
