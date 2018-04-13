@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
+<html lang="en">
 
 <!-- Head tag -->
 <head>
@@ -10,11 +10,7 @@
 
     <!--Description-->
     
-        <meta name="description" content="Smart Data Market 以下简称（SDMK）是 TalkingData 作为数据行业的先行者推出的智能数据服务商城。SDMK 在之前有一个1.0版的后台管理系统。但是随着业务和需求的增加，以及公司前端技术栈的统一。我们使用 Vue 重构了之前的系统，命名为 SDMK-ADMIN，同时也根据需求增加新功能。下图是 SDMK-ADMIN 的基本页面样式
-
-目录结构1234567891011121314151617├── build                      // Webpack构建配置相关├── config                     // Webpack环境配置相关├── src                        // 源代码│   ├── assets                 // 图片、样式、js等静态资源│   ├── components             // 组件相关│   ├── models                 // api请求相关文件│   ├── router                 // 路由│   ├── views                  // 视图层│   ├── app.vue                // 入口页面│   └── main.js                // 入口文件，Vue初始化、配置插件等├── static                     // 第三方不打包资源├── .babelrc                   // babel-loader 配置├── .eslintrc.js               // eslint 配置项├── .stylelintrc.js            // stylelint 配置项├── .gitignore                 // git 忽略项├── index.html                 // html模板└── package.json               // package.json
-SDMK-ADMIN 使用 vue-cli 进行项目初始化，然后根据实际需求进行了一些调整，上图是 SDMK-ADMIN 的目录结构。首先介绍一下src目录重里面的内容。
-views和components">
+        <meta name="description" content="Smart Data Market 以下简称（SDMK）是 TalkingData 作为数据行业的先行者推出的智能数据服务商城。SDMK 在之前有一个1.0版的后台管理系统。但是随着业务和需求的增加，以及公司前端技术栈的统一。我们使用 Vue 重构了之前的系统，命名为 SDMK-ADMIN，同时也根据需求增加新功能。下图是 SDMK-ADMIN 的基本页面样式">
     
 
     <!--Author-->
@@ -161,11 +157,11 @@
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <p>Smart Data Market 以下简称（SDMK）是 TalkingData 作为数据行业的先行者推出的智能数据服务商城。SDMK 在之前有一个1.0版的后台管理系统。但是随着业务和需求的增加，以及公司前端技术栈的统一。我们使用 Vue 重构了之前的系统，命名为 SDMK-ADMIN，同时也根据需求增加新功能。下图是 SDMK-ADMIN 的基本页面样式</p>
+<a id="more"></a>
 <p><img src="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171023-100652.jpg" alt="Jietu20171023-100652"></p>
 <h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">├── build                      // Webpack构建配置相关</div><div class="line">├── config                     // Webpack环境配置相关</div><div class="line">├── src                        // 源代码</div><div class="line">│   ├── assets                 // 图片、样式、js等静态资源</div><div class="line">│   ├── components             // 组件相关</div><div class="line">│   ├── models                 // api请求相关文件</div><div class="line">│   ├── router                 // 路由</div><div class="line">│   ├── views                  // 视图层</div><div class="line">│   ├── app.vue                // 入口页面</div><div class="line">│   └── main.js                // 入口文件，Vue初始化、配置插件等</div><div class="line">├── static                     // 第三方不打包资源</div><div class="line">├── .babelrc                   // babel-loader 配置</div><div class="line">├── .eslintrc.js               // eslint 配置项</div><div class="line">├── .stylelintrc.js            // stylelint 配置项</div><div class="line">├── .gitignore                 // git 忽略项</div><div class="line">├── index.html                 // html模板</div><div class="line">└── package.json               // package.json</div></pre></td></tr></table></figure>
 <p>SDMK-ADMIN 使用 vue-cli 进行项目初始化，然后根据实际需求进行了一些调整，上图是 SDMK-ADMIN 的目录结构。首先介绍一下src目录重里面的内容。</p>
-<h3 id="views和components"><a href="#views和components" class="headerlink" title="views和components"></a>views和components</h3><a id="more"></a>
-<p>从上面的网站侧边栏导航可以看到，我们的后台在设计页面的时候，是按照不同的功能管理模块来组织页面的。因此，views 目录中的每一条子目录对应着页面上的一个管理模块。components 是存放页面组件的目录，为了方便维护，除了 common 目录存放公用组件外，页面级别的组件也是按照和 views 中的子目录一一对应的方式组织的。</p>
+<h3 id="views和components"><a href="#views和components" class="headerlink" title="views和components"></a>views和components</h3><p>从上面的网站侧边栏导航可以看到，我们的后台在设计页面的时候，是按照不同的功能管理模块来组织页面的。因此，views 目录中的每一条子目录对应着页面上的一个管理模块。components 是存放页面组件的目录，为了方便维护，除了 common 目录存放公用组件外，页面级别的组件也是按照和 views 中的子目录一一对应的方式组织的。</p>
 <p><img src="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171023-105957.jpg" alt="Jietu20171023-105957"></p>
 <p>css 的组织方式，我们采用的是就近原则。即组件自己独有的 css 文件直接放在该组件的目录下，这样在后续的开发中，能很方便的定位到相关的 css 文件。另外在 assets 目录里有一个单独的 common.css 文件。这个文件包含的内容大多是全局的样式，比如整体布局样式、页面通用样式等。common.css文件从app.vue中全局引入。</p>
 <h3 id="models"><a href="#models" class="headerlink" title="models"></a>models</h3><p>models 目录中放的是和 api 接口相关的内容，通俗来讲就是存放各个页面的各个 http 请求的链接、参数等配置。从下图可以看到，每个js文件基本上也是按照页面模块来进行命名的，这么做的目的同样也是为了方面维护。</p>
@@ -182,7 +178,7 @@
 <h3 id="router"><a href="#router" class="headerlink" title="router"></a>router</h3><p>路由控制是用的 vue-router，比较常规的配置就不详细说明了。只说一个需要要注意的地方。</p>
 <p><img src="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171019-115932.jpg" alt="Jietu20171019-115932"></p>
 <p>如上图所示，这两个路由用的是用同一个 component。当<br>在这两个路由之间切换时，是<strong>不会</strong>触发 Vue 的 mounted 钩子的，也不会触发 transition 动画效果。vue 1.x 版本可以用路由钩子 canReuse 来取消组件的复用，但是vue 2.x 版本已经取消了这个钩子。要解决这个问题，除了通过 watch $route 的变化来做处理。还可以通过计算属性, 生成一个 key, 这个 key 必须保证每一个 url 都不一样，然后给 router-view 绑定即可。我们是用时间戳生成的 key ：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;router-view :key=<span class="string">"key"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span></div><div class="line"></div><div class="line">computed: &#123;</div><div class="line">    key() &#123;</div><div class="line">        return this.$route.name + new Date().getTime();</div><div class="line">    &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;router-view :key=<span class="string">"key"</span>&gt;&lt;/router-view&gt;</div><div class="line"></div><div class="line">computed: &#123;</div><div class="line">    key() &#123;</div><div class="line">        return this.$route.name + new Date().getTime();</div><div class="line">    &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
 <p>这种方法比较粗暴, 会作用到所有的页面, 如果只是想让部分页面起作用, 那么就不要将 key 直接绑在需要组件的根元素上就可以了。</p>
 <h3 id="assets"><a href="#assets" class="headerlink" title="assets"></a>assets</h3><p>assets 目录就是放一些 favicon 图标、图片、样式、自己用的一些js文件等。在这里特别提示一下 favicon 图标的处理方法。</p>
 <p>在 webpack 插件中，通常会使用一个叫 HtmlWebpackPlugin 的插件。它的作用是在打包的时候，自动生成一个 html 文件，并且引用相关的assets文件 - 比如css, js。</p>
@@ -229,9 +225,7 @@
 </article>
 
     <!-- Footer -->
-    <hr />
-
-<!-- Footer -->
+    <!-- Footer -->
 <footer>
     <div class="container">
         <div class="row">
@@ -259,8 +253,8 @@
                     
                 </ul>
                 <p class="copyright text-muted">&copy; 2018 ZhangChengbin<br></p>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+                <!-- <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p> -->
             </div>
         </div>
     </div>
