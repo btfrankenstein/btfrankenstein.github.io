@@ -178,7 +178,7 @@
 <h3 id="router"><a href="#router" class="headerlink" title="router"></a>router</h3><p>路由控制是用的 vue-router，比较常规的配置就不详细说明了。只说一个需要要注意的地方。</p>
 <p><img src="http://ovsnj3ch0.bkt.clouddn.com/Jietu20171019-115932.jpg" alt="Jietu20171019-115932"></p>
 <p>如上图所示，这两个路由用的是用同一个 component。当<br>在这两个路由之间切换时，是<strong>不会</strong>触发 Vue 的 mounted 钩子的，也不会触发 transition 动画效果。vue 1.x 版本可以用路由钩子 canReuse 来取消组件的复用，但是vue 2.x 版本已经取消了这个钩子。要解决这个问题，除了通过 watch $route 的变化来做处理。还可以通过计算属性, 生成一个 key, 这个 key 必须保证每一个 url 都不一样，然后给 router-view 绑定即可。我们是用时间戳生成的 key ：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;router-view :key=<span class="string">"key"</span>&gt;&lt;/router-view&gt;</div><div class="line"></div><div class="line">computed: &#123;</div><div class="line">    key() &#123;</div><div class="line">        return this.$route.name + new Date().getTime();</div><div class="line">    &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;router-view :key=<span class="string">"key"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span></div><div class="line"></div><div class="line">computed: &#123;</div><div class="line">    key() &#123;</div><div class="line">        return this.$route.name + new Date().getTime();</div><div class="line">    &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
 <p>这种方法比较粗暴, 会作用到所有的页面, 如果只是想让部分页面起作用, 那么就不要将 key 直接绑在需要组件的根元素上就可以了。</p>
 <h3 id="assets"><a href="#assets" class="headerlink" title="assets"></a>assets</h3><p>assets 目录就是放一些 favicon 图标、图片、样式、自己用的一些js文件等。在这里特别提示一下 favicon 图标的处理方法。</p>
 <p>在 webpack 插件中，通常会使用一个叫 HtmlWebpackPlugin 的插件。它的作用是在打包的时候，自动生成一个 html 文件，并且引用相关的assets文件 - 比如css, js。</p>
@@ -237,7 +237,7 @@
 
                     
                         <li>
-                            <a href="https://github.com/klugjo/hexo-theme-clean-blog" target="_blank">
+                            <a href="https://github.com/btfrankenstein" target="_blank">
                                 <span class="fa-stack fa-lg">
                                     <i class="fa fa-circle fa-stack-2x"></i>
                                     <i class="fa fa-github fa-stack-1x fa-inverse"></i>
