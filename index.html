@@ -148,7 +148,13 @@
         </h2>
         
         <div class="post-content-preview">
-          ...
+          
+本文是根据谷歌开发者文档 Constructing the Object Model 和 Render-tree Construction, Layout, and Paint 两个章节翻译整理而成
+
+Document Object Model (DOM)先看下图，解释了 DOM 的创建过程
+
+
+转化（Conversion）：浏览器读取 HTML 文件，根据不同的编码方式（比如 UTF-8）将原...
         </div>
     </a>
     <p class="post-meta">
@@ -167,12 +173,8 @@
             Vue服务端渲染(SSR)初探
         </h2>
         
-            <h3 class="post-subtitle">
-                Vue服务端渲染(SSR)初探
-            </h3>
-        
         <div class="post-content-preview">
-          SSR？SSR - 是Server-Side Rendering（服务端渲染）的缩写。通常情况下，我们使用 Vue.js 构建单页面应用的。在这种方式下，页面最开始只有一个 &lt;div id=&quot;app&quot;&gt;&lt;/div&gt; 元素，该元素内部的所有其他的 DOM 和数据都是通过 js 渲染加载出来的。SSR 则不同，每个页面或者组件会被渲染为服务器端的 HTML 字符串，然后被直接发送到浏览器。...
+          SSR？SSR - 是Server-Side Rendering（服务端渲染）的缩写。通常情况下，我们使用 Vue.js 构建单页面应用的。在这种方式下，页面最开始只有一个 &lt;div id=&quot;app&quot;&gt;&lt;/div&gt; 元素，该元素内部的所有其他的 DOM 和数据都是通过 js 渲染加载出来的。SSR 则不同，每个页面或者组件会被渲染为服务器端的 HTML ...
         </div>
     </a>
     <p class="post-meta">
@@ -196,7 +198,7 @@
 
 Observer 最主要的作用就是实现了上图中 touch - Data(getter) - Collect as Dependency 这段过程，也就是依赖收集的过程。
 还是以下面的代码为例子进行梳理
-123456789101112var vm = new Vue(&#123;  el: '#demo',  data: &#123;    firstName: 'Hello',    fullName: ''  &#125;,  watch: &#123;    firstName(val) &#123;      this.fullName = val + 'TalkingData';    &#125;,  &#125;&#125;)...
+123456789101112var vm = new Vue(&#123;  el: '#demo',  ...
         </div>
     </a>
     <p class="post-meta">
@@ -215,10 +217,7 @@ Observer 最主要的作用就是实现了上图中 touch - Data(getter) - Coll
         
         <div class="post-content-preview">
           之前在学习 Vue 官方文档深入响应式原理时，大概对响应式有一个概念性的了解以及它的效果是什么样子的。最近通过阅读 Vue 的源码并查询相关资料，对响应式原理有了更进一步的认识，并且大体上可以还原出它的实现过程。最近几篇文章会记录一下自己的理解过程。
-响应式原理我理解可以分为两步，第一步是依赖收集的过程，第二步是触发-重新渲染的过程。Observer 用来使用 Object.defineProperty 把指定属性转为 getter/setter，它是负责实现依赖收集的过程。Watcher 和 Dep 是用来保证触发-重新渲染的过程顺利完成。Watcher 是观察者模式中的观察者；我把 Dep 看成是观察者模式中的主题，它也是管理和保存观察者的地方。每当主题更新，会通知所有的观察者执行更新，从而能完成重新渲染的步骤。
-这篇文章着重介绍 Watcher 和 Dep，Observer 相关的内容会在下篇文章介绍。
-接下来，从最基本的实例化 Vue 开始讲起，本篇文章会以下面这段代码作为实际例子，来剖析依赖收集的过程。
-123456789101112var vm = new Vue(&#123;  el: '#demo',  data: &#123;    firstName: 'Hello',    fullName: ''  &#125;,  watch: &#123;    firstName(val) &#123;      this.fullName = val + 'TalkingData';    &#125;,  &#125;&#125;)...
+响应式原理我理解可以分为两步，第一步是依赖收集的过程，第二步是触发-重新渲染的过程。Observer 用来使用 Object.defineProp...
         </div>
     </a>
     <p class="post-meta">
@@ -240,13 +239,7 @@ Observer 最主要的作用就是实现了上图中 touch - Data(getter) - Coll
 
 观察者模式是软件设计模式的一种。在此种模式中，一个目标对象管理所有相依于它的观察者对象，并且在它本身的状态改变时主动发出通知。这通常透过呼叫各观察者所提供的方法来实现。此种模式通常被用来实时事件处理系统。
 
-观察者模式也被称作发布-订阅模式，它由三个角色构成。
-
-观察者 - 也称作订阅者
-主题内容
-发布者
-
-这三者是一种一对多的依赖关系，即当一个发布者发布或者更新主题之后，所有订阅了该主题的观察者都会得到通知并自动更新，解决了主题对象与观察者之间功能的耦合。...
+观察者模式也被称作发布-订阅模式，它由三个角色构成。...
         </div>
     </a>
     <p class="post-meta">
@@ -264,7 +257,10 @@ Observer 最主要的作用就是实现了上图中 touch - Data(getter) - Coll
         </h2>
         
         <div class="post-content-preview">
-          Smart Data Market 以下简称（SDMK）是 TalkingData 作为数据行业的先行者推出的智能数据服务商城。SDMK 在之前有一个1.0版的后台管理系统。但是随着业务和需求的增加，以及公司前端技术栈的统一。我们使用 Vue 重构了之前的系统，命名为 SDMK-ADMIN，同时也根据需求增加新功能。下图是 SDMK-ADMIN 的基本页面样式...
+          Smart Data Market 以下简称（SDMK）是 TalkingData 作为数据行业的先行者推出的智能数据服务商城。SDMK 在之前有一个1.0版的后台管理系统。但是随着业务和需求的增加，以及公司前端技术栈的统一。我们使用 Vue 重构了之前的系统，命名为 SDMK-ADMIN，同时也根据需求增加新功能。下图是 SDMK-ADMIN 的基本页面样式
+
+
+目录结构123456789101...
         </div>
     </a>
     <p class="post-meta">
@@ -288,13 +284,7 @@ Observer 最主要的作用就是实现了上图中 touch - Data(getter) - Coll
 页面大体上分为两个区域：
 
 左侧列表区域，其中包含已购服务和编织历史两个 tab 页的内容
-右侧编织区域。列表区域的已购服务标签内，可以选择想要拖拽的服务，如果该服务可以被拖拽到编织区域，则编织区域显示蓝色，相反则显示红色；编织历史标签内则可以选择编织历史，编织区域会加载改编织历史所包含的服务
-
-文件组织结构如下图：
-
-在项目结构上，左侧列表区域拆分成了两个子组件，serviceList 和 weaveList。右侧编织区域包括底部出参/入参部分拆分为 weaveArea 子组件。其他部分比如输入框、按钮和编织名称等内容，作为该页面的 index 父组件。weaveTest 和 serviceListItem 本文不用关注。
-这种情况下就会涉及到兄弟组件之间的参数传递和状态管理，因此可以系统的使用 vuex 来对该模块进行状态管理了。
-$store 内容...
+右侧编织区域。列表区域的已购服务标签内，可...
         </div>
     </a>
     <p class="post-meta">
@@ -313,8 +303,7 @@ $store 内容...
         
         <div class="post-content-preview">
           通过之前的两篇文章，了解 webpack 相关的一些知识。现在终于可以进入到实践了。手里的项目自从用 vue-cli 构建完成之后，就再也没有动过 webpack 里面的相关配置。随着项目规模越来越大，每次上测试或者生产环境用于打包的时间越来越长。一次构建将近90s的时间，实在无法忍受。于是着手进行优化。
-webpack 升级 3.x根据官方的 release 声明，webpack 3.x 的一个显著特性是 Scope Hoisting。之前 webpack 构建时会把每个模块单独的放到一个闭包函数中，这会增加 javascript 的执行时间。 3.x 之后，webpack 则会将有联系的模块，放到一个大的闭包函数里面去，这样可以减少构建出来的文件大小和 javascript 的执行时间。要让 Scope Hoisting 起作用，只需要添加下面的插件：
-12345module.exports = &#123;  plugins: [    new webpack.optimize.ModuleConcatenationPlugin()  ]&#125;;...
+webpack 升级 3.x根据官方的 release 声明，webpack 3.x ...
         </div>
     </a>
     <p class="post-meta">
@@ -335,8 +324,7 @@ webpack 升级 3.x根据官方的 release 声明，webpack 3.x 的一个显著�
           代码分割（code splitting）是webpack相当重要的一个特性。它可以让代码分割到不同的文件（bundle）中，以便按需或者并行加载这些文件。代码分割可以得到更小的文件，控制资源加载的优先级。如果使用得当，更是可以优化加载的时间。
 这里先看一个使用 vue-cli 构建的实际项目打包出来的 bundle 都有什么
 
-这里只关注 js 文件。可以看到除了上篇文章提到的 app、vendor、manifest文件，还有从0到7开头的 js 文件。这几个以数字开头的 js 文件是哪里来的，又有什么作用呢。这篇文章就是解答这个问题。
-代码分割的方法官网给出了三种常用的代码分割的方法...
+这里只关注 js 文件。可以看到除了上篇文章提到的 app、vendo...
         </div>
     </a>
     <p class="post-meta">
@@ -355,9 +343,7 @@ webpack 升级 3.x根据官方的 release 声明，webpack 3.x 的一个显著�
         
         <div class="post-content-preview">
           最近有需求需要对 vue-cli 生成的项目需要做一些 webpack 构建速度方面的优化。要想优化，首先要明白 webpack 配置文件中各种配置的作用是什么。所以想写一系列文章来记录一下自己的研究过程。文章应该不会涵盖所有内容，只会对自己感兴趣的部分做记录和分析。
-vue-cli中的CommonsChunkPlugin下图是使用 vue-cli 构建之后，webpack.prod.conf.js 中有关 CommonsChunkPlugin 的代码块。可以看到 new 了两次 CommonsChunkPlugin。为什么要 new 两次呢？这两次的作用分别是什么呢？
-
-第一次 new webpack.optimize.CommonsChunkPluginwebpack 官网对 CommonsChunkPlugin 配置项的解释...
+vue-cli中的CommonsChunkPlugin下图是使用 vue-cli 构建之后，webpack.prod.conf.j...
         </div>
     </a>
     <p class="post-meta">
