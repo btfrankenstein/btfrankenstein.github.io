@@ -23,9 +23,12 @@ article .container .row .video-container embed {
 article .container .row blockquote {
   font-style: italic;
   font-family: font-serif;
-  font-size: 1.2em;
-  padding: 0 30px 15px;
-  text-align: center;
+  font-size: 0.95em;
+  padding: 10px 20px;
+  color: #808080;
+}
+article .container .row blockquote p {
+  margin: 0;
 }
 article .container .row blockquote footer {
   border-top: none;
@@ -52,7 +55,7 @@ article .container .row .pullquote.left {
   float: left;
 }
 figure.highlight {
-  background: #eee;
+  background: #f7f7f7;
   border: 1px solid color-border;
   margin-top: 15px;
   padding: 7px 15px;
@@ -77,16 +80,20 @@ figure.highlight pre {
   padding: 0;
   margin: 0;
   background: none;
+  color: #37474f;
 }
 figure.highlight table {
   margin-top: 0;
   border-spacing: 0;
 }
 figure.highlight table .gutter {
-  color: color-meta;
+  color: color-border;
   padding-right: 15px;
   border-right: 1px solid color-border;
   text-align: right;
+}
+figure.highlight table .gutter pre {
+  color: rgba(27,31,35,0.3);
 }
 figure.highlight table .code {
   padding-left: 15px;
@@ -117,7 +124,7 @@ pre .css .tag,
 pre .request,
 pre .status,
 pre .nginx .title {
-  color: #859900;
+  color: #ef8223;
 }
 pre .number,
 pre .command,
@@ -127,7 +134,7 @@ pre .phpdoc,
 pre .tex .formula,
 pre .regexp,
 pre .hexcolor {
-  color: #2aa198;
+  color: #0d904f;
 }
 pre .title,
 pre .localvars,
@@ -138,7 +145,7 @@ pre .identifier,
 pre .vhdl,
 pre .literal,
 pre .id {
-  color: #268bd2;
+  color: #3b78e7;
 }
 pre .attribute,
 pre .variable,

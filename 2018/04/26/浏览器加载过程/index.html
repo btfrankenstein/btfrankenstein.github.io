@@ -76,6 +76,8 @@ Document Object Model (DOM)先看下图，解释了 DOM 的创建过程
 
     <!-- favicon -->
     
+    <link rel="icon" href="/img/favicon.png">
+    
 	
 </head>
 
@@ -128,7 +130,7 @@ Document Object Model (DOM)先看下图，解释了 DOM 的创建过程
     <!-- Page Header -->
 <!-- Set your background image for this header in your post front-matter: cover -->
 
-<header class="intro-header" style="background-image: url('/img/home-cover.jpg')">
+<header class="intro-header" style="background-image: url('/img/chrome_loading.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -208,7 +210,8 @@ Document Object Model (DOM)先看下图，解释了 DOM 的创建过程
 <li>Layout 计算 render tree 的具体位置和元素大小</li>
 <li>Paint 负责将 render tree 转化为屏幕上的像素点</li>
 </ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>浏览器<strong>加载</strong>的过程大体上是以下五个步骤</p>
+<ol>
 <li>解析 HTML 并创建 DOM 树</li>
 <li>解析 CSS 并创建 CSSOM 树</li>
 <li>把 DOM 和 CSSOM 合并为 render 树</li>
